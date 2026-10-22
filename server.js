@@ -53,14 +53,25 @@ const server = http.createServer((req, res) => {
   });
 });
 
+server.on('error', (err) => {
+  console.error('Server error:', err);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 server.listen(PORT, () => {
   const url = `http://localhost:${PORT}`;
   console.log(`\n======================================================`);
   console.log(`🚀 Awesome Web Effects Studio draait op: ${url}`);
   console.log(`======================================================\n`);
 
-  // Auto-open browser on Windows if flag or default
-  if (process.argv.includes('--open') || !process.env.NO_OPEN) {
+  if (process.argv.includes('--open')) {
     const startCmd = process.platform === 'win32' ? `start "" "${url}"` : `open "${url}"`;
     exec(startCmd, (err) => {
       if (err) console.log(`Open handmatig in je browser: ${url}`);
