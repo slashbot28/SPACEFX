@@ -1,0 +1,12 @@
+{
+  "name": "awesome-web-effects-studio",
+  "version": "1.0.0",
+  "description": "Interactive Web Effects Studio & Playground featuring all effects from awesome-web-effect",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["web-effects", "canvas", "webgl", "css3d", "particles", "animation"],
+  "author": "Antigravity",
+  "license": "MIT"
+}

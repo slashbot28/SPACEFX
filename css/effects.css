@@ -1,0 +1,663 @@
+/* ========================================================
+   CSS EFFECTS STYLING SHEET
+   Awesome Web Effects - Interactive Components
+   ======================================================== */
+
+/* --- 1. CSS 3D CUBE --- */
+.cube-scene {
+  width: 240px;
+  height: 240px;
+  perspective: 900px;
+  margin: auto;
+}
+
+.cube-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.1s linear;
+}
+
+.cube-face {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border: 2px solid rgba(59, 130, 246, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 40px rgba(59, 130, 246, 0.35);
+  user-select: none;
+}
+
+.cube-face-front  { transform: rotateY(  0deg) translateZ(120px); }
+.cube-face-back   { transform: rotateY(180deg) translateZ(120px); }
+.cube-face-right  { transform: rotateY( 90deg) translateZ(120px); }
+.cube-face-left   { transform: rotateY(-90deg) translateZ(120px); }
+.cube-face-top    { transform: rotateX( 90deg) translateZ(120px); }
+.cube-face-bottom { transform: rotateX(-90deg) translateZ(120px); }
+
+/* --- 2. CSS 3D CARDS FLIP --- */
+.cards-3d-wrapper {
+  display: flex;
+  gap: 30px;
+  perspective: 1200px;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-3d {
+  width: 200px;
+  height: 290px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+.card-3d:hover, .card-3d.flipped {
+  transform: rotateY(180deg) scale(1.05);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-face-front {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+.card-face-back {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  transform: rotateY(180deg);
+  color: #fff;
+}
+
+/* --- 3. CSS 3D SOLAR SYSTEM --- */
+.solar-system {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  transform-style: preserve-3d;
+  transform: rotateX(65deg) rotateZ(0deg);
+}
+
+.sun {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 60px; height: 60px;
+  margin-top: -30px; margin-left: -30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fde047 20%, #f97316 70%, #ea580c 100%);
+  box-shadow: 0 0 60px #f97316, 0 0 100px #f59e0b;
+  transform: rotateX(-65deg);
+}
+
+.orbit {
+  position: absolute;
+  top: 50%; left: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  animation: orbitRotate linear infinite;
+}
+
+.orbit-1 { width: 140px; height: 140px; margin: -70px; animation-duration: 4s; }
+.orbit-2 { width: 230px; height: 230px; margin: -115px; animation-duration: 8s; }
+.orbit-3 { width: 330px; height: 330px; margin: -165px; animation-duration: 14s; }
+.orbit-4 { width: 440px; height: 440px; margin: -220px; animation-duration: 22s; }
+
+.planet {
+  position: absolute;
+  top: 0; left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(-65deg);
+}
+
+.planet-1 { width: 14px; height: 14px; background: #60a5fa; box-shadow: 0 0 10px #60a5fa; }
+.planet-2 { width: 20px; height: 20px; background: #34d399; box-shadow: 0 0 10px #34d399; }
+.planet-3 { width: 28px; height: 28px; background: #f43f5e; box-shadow: 0 0 15px #f43f5e; }
+.planet-4 { width: 36px; height: 36px; background: #fbbf24; box-shadow: 0 0 20px #fbbf24; }
+
+@keyframes orbitRotate {
+  from { transform: rotateZ(0deg); }
+  to { transform: rotateZ(360deg); }
+}
+
+/* --- 4. MAKISU 3D ORIGAMI DROPDOWN --- */
+.makisu-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.makisu-hint-badge {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  padding: 8px 18px;
+  border-radius: 999px;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+  animation: pulseHint 2s infinite ease-in-out;
+}
+
+@keyframes pulseHint {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.03); opacity: 1; box-shadow: 0 0 25px rgba(6, 182, 212, 0.4); }
+}
+
+.makisu-menu {
+  width: 330px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6));
+}
+
+.makisu-header {
+  position: relative;
+  z-index: 10;
+  padding: 16px 20px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.makisu-header:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.makisu-header .chevron {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9rem;
+}
+
+.makisu-menu.folded .makisu-header {
+  border-radius: 12px;
+}
+
+.makisu-menu.folded .makisu-header .chevron {
+  transform: rotate(-90deg);
+}
+
+.makisu-list {
+  display: flex;
+  flex-direction: column;
+  transform-style: preserve-3d;
+}
+
+.makisu-item {
+  position: relative;
+  background: linear-gradient(90deg, #182234, #0f172a);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: none;
+  padding: 15px 20px;
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.makisu-item:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+.makisu-item:hover {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: #fff;
+  transform: translateZ(20px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+  z-index: 5;
+}
+
+.makisu-item:active {
+  transform: translateZ(10px) scale(0.98);
+}
+
+.makisu-item .item-action-badge {
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent-cyan);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+}
+
+.makisu-item:hover .item-action-badge {
+  background: #fff;
+  color: #1e3a8a;
+}
+
+/* Cascading Origami Bamboo Folding Waves */
+.makisu-menu.folded .makisu-item {
+  transform: rotateX(-90deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Unfolding cascade delays */
+.makisu-menu:not(.folded) .makisu-item:nth-child(1) { transition-delay: 0.05s; }
+.makisu-menu:not(.folded) .makisu-item:nth-child(2) { transition-delay: 0.10s; }
+.makisu-menu:not(.folded) .makisu-item:nth-child(3) { transition-delay: 0.15s; }
+.makisu-menu:not(.folded) .makisu-item:nth-child(4) { transition-delay: 0.20s; }
+.makisu-menu:not(.folded) .makisu-item:nth-child(5) { transition-delay: 0.25s; }
+
+/* Folding cascade delays in reverse */
+.makisu-menu.folded .makisu-item:nth-child(5) { transition-delay: 0.02s; }
+.makisu-menu.folded .makisu-item:nth-child(4) { transition-delay: 0.08s; }
+.makisu-menu.folded .makisu-item:nth-child(3) { transition-delay: 0.14s; }
+.makisu-menu.folded .makisu-item:nth-child(2) { transition-delay: 0.20s; }
+.makisu-menu.folded .makisu-item:nth-child(1) { transition-delay: 0.26s; }
+
+/* --- 5. IMAGE EFFECTS --- */
+.image-stage-wrap {
+  position: relative;
+  max-width: 480px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.image-stage-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Loupe Magnifier */
+.magnifier-lens {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  cursor: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  display: none;
+  background-repeat: no-repeat;
+}
+
+/* 3D Pop Tilt */
+.tilt-card-pop {
+  width: 320px;
+  height: 420px;
+  border-radius: var(--radius-lg);
+  position: relative;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tilt-inner-layer {
+  transform: translateZ(60px);
+  text-align: center;
+  color: #fff;
+  padding: 24px;
+}
+
+/* Ken Burns */
+.kenburns-container {
+  width: 480px;
+  height: 300px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+.kenburns-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: kenburnsAnim 16s infinite alternate ease-in-out;
+}
+
+@keyframes kenburnsAnim {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.25) translate(-4%, 3%); }
+  100% { transform: scale(1.15) translate(4%, -3%); }
+}
+
+/* --- 6. INPUT EFFECTS --- */
+.input-demo-box {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.power-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.power-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: 1.1rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.power-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.combo-streak-badge {
+  position: absolute;
+  right: 12px;
+  top: -14px;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(239, 68, 68, 0.5);
+  transform: scale(0);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.combo-streak-badge.active {
+  transform: scale(1);
+}
+
+/* Typewriter & Scrambler */
+.scramble-text-display {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+  min-height: 2.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- 7. BUTTON EFFECTS --- */
+.buttons-demo-stage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Liquid Ripple */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+  padding: 16px 36px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(0);
+  animation: rippleAnim 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Shiny Foil Sweep */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  padding: 16px 36px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: rotate(25deg);
+  animation: shineSweep 3s infinite ease-in-out;
+}
+
+@keyframes shineSweep {
+  0% { left: -60%; }
+  35%, 100% { left: 140%; }
+}
+
+/* Magnetic Button */
+.btn-magnetic {
+  padding: 16px 36px;
+  border-radius: var(--radius-md);
+  background: #0f172a;
+  border: 2px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+  transition: transform 0.15s ease-out;
+}
+
+/* Elastic Progress Button */
+.btn-elastic {
+  width: 180px;
+  height: 50px;
+  border-radius: 25px;
+  background: #10b981;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-elastic.loading {
+  width: 50px;
+  border-radius: 50%;
+  background: transparent;
+  border: 4px solid rgba(16, 185, 129, 0.2);
+  border-top-color: #10b981;
+  animation: spinLoader 0.8s linear infinite;
+  color: transparent;
+}
+
+@keyframes spinLoader {
+  to { transform: rotate(360deg); }
+}
+
+/* --- 8. LOADERS --- */
+.loaders-demo-wrap {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Three dots wave */
+.three-dots-wave {
+  display: flex;
+  gap: 8px;
+}
+.three-dots-wave span {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  animation: dotWave 1.2s infinite ease-in-out;
+}
+.three-dots-wave span:nth-child(2) { animation-delay: 0.2s; }
+.three-dots-wave span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotWave {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-16px); opacity: 1; }
+}
+
+/* Cyber Radar */
+.radar-loader {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid rgba(6, 182, 212, 0.4);
+  position: relative;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.radar-loader::before {
+  content: "";
+  position: absolute;
+  inset: 15px;
+  border-radius: 50%;
+  border: 1px dashed rgba(6, 182, 212, 0.6);
+}
+
+.radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0deg 270deg, rgba(6, 182, 212, 0.6) 360deg);
+  animation: radarSpin 2s linear infinite;
+}
+
+@keyframes radarSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- 9. SPECIAL / RETRO / CRT --- */
+.bad-tv-screen {
+  position: relative;
+  width: 520px;
+  height: 320px;
+  background: #000;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(0, 255, 100, 0.2);
+}
+
+.bad-tv-screen::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+.bad-tv-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #00ff66;
+  font-family: var(--font-mono);
+  text-shadow: 0 0 8px #00ff66;
+  animation: tvFlicker 0.15s infinite;
+}
+
+@keyframes tvFlicker {
+  0% { opacity: 0.96; }
+  50% { opacity: 1; }
+  100% { opacity: 0.94; }
+}
+
+/* Frosted Glass Demo */
+.frosted-glass-box {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 36px 48px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  color: #fff;
+  text-align: center;
+}
+
