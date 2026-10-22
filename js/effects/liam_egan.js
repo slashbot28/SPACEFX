@@ -959,13 +959,16 @@ window.EffectRegistry['phosphorescence-flow'] = {
   },
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
+    const safeWord = (s.targetWord || 'GEERT').replace(/'/g, "\\'");
     return `<!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Phosphorescence Particle Text: ${s.targetWord || 'Text'}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phosphorescence Particle Text: ${s.targetWord || 'GEERT'}</title>
   <style>
-    body { margin: 0; background: #010409; overflow: hidden; height: 100vh; }
+    * { box-sizing: border-box; }
+    body, html { margin: 0; padding: 0; background: #010409; overflow: hidden; width: 100%; height: 100%; font-family: sans-serif; }
     canvas { display: block; width: 100vw; height: 100vh; }
   </style>
 </head>
@@ -973,41 +976,111 @@ window.EffectRegistry['phosphorescence-flow'] = {
   <canvas id="c"></canvas>
   <script>
     const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
-    let w = canvas.width = window.innerWidth, h = canvas.height = window.innerHeight;
-
-    // Text raster
-    const off = document.createElement('canvas'); off.width = w; off.height = h;
+    let w, h;
+    const off = document.createElement('canvas');
     const octx = off.getContext('2d');
-    const word = '${s.targetWord || 'GEERT'}';
-    octx.fillStyle = '#fff'; octx.font = '800 ' + Math.min(130, Math.floor(w/(word.length*0.75))) + 'px sans-serif';
-    octx.textAlign = 'center'; octx.textBaseline = 'middle'; octx.fillText(word, w/2, h/2);
-    const data = octx.getImageData(0,0,w,h).data, targets = [];
-    for(let y=0; y<h; y+=4){ for(let x=0; x<w; x+=4){ if(data[(y*w+x)*4+3]>128) targets.push({x,y}); } }
+    const word = '${safeWord}';
+    const targets = [];
+    const count = ${s.particleCount || 2200};
+    const parts = [];
 
-    const parts = Array.from({ length: ${s.particleCount} }, () => {
-      const t = targets[Math.floor(Math.random()*targets.length)] || {x:w/2, y:h/2};
-      return { x: Math.random()*w, y: Math.random()*h, tx: t.x, ty: t.y, vx: 0, vy: 0 };
-    });
+    function initTargets() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      off.width = w;
+      off.height = h;
+      octx.clearRect(0, 0, w, h);
+
+      const fontSize = Math.min(140, Math.max(36, Math.floor(w / ((word.length || 1) * 0.65))));
+      octx.fillStyle = '#ffffff';
+      octx.font = '800 ' + fontSize + 'px sans-serif';
+      octx.textAlign = 'center';
+      octx.textBaseline = 'middle';
+      octx.fillText(word, w / 2, h / 2);
+
+      const data = octx.getImageData(0, 0, w, h).data;
+      targets.length = 0;
+      for (let y = 0; y < h; y += 4) {
+        for (let x = 0; x < w; x += 4) {
+          if (data[(y * w + x) * 4 + 3] > 120) {
+            targets.push({ x, y });
+          }
+        }
+      }
+
+      if (targets.length === 0) {
+        for (let a = 0; a < Math.PI * 2; a += 0.05) {
+          targets.push({ x: w / 2 + Math.cos(a) * 120, y: h / 2 + Math.sin(a) * 60 });
+        }
+      }
+
+      if (parts.length === 0) {
+        for (let i = 0; i < count; i++) {
+          const t = targets[i % targets.length];
+          parts.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            tx: t.x + (Math.random() - 0.5) * 4,
+            ty: t.y + (Math.random() - 0.5) * 4,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            size: Math.random() * 1.8 + 1,
+            colorMix: Math.random()
+          });
+        }
+      } else {
+        for (let i = 0; i < parts.length; i++) {
+          const t = targets[i % targets.length];
+          parts[i].tx = t.x + (Math.random() - 0.5) * 4;
+          parts[i].ty = t.y + (Math.random() - 0.5) * 4;
+        }
+      }
+    }
 
     let t = 0, mx = -999, my = -999;
+    window.addEventListener('resize', initTargets);
     window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    window.addEventListener('touchmove', e => {
+      if (e.touches && e.touches[0]) {
+        mx = e.touches[0].clientX;
+        my = e.touches[0].clientY;
+      }
+    });
+
+    initTargets();
 
     function tick() {
-      ctx.fillStyle = 'rgba(1, 4, 9, 0.2)'; ctx.fillRect(0,0,w,h);
-      t += 0.02 * ${s.flowSpeed};
-      for(const p of parts) {
-        const a = Math.sin(p.x*0.005+t)*Math.cos(p.y*0.005+t)*Math.PI*2;
-        p.vx += ((p.tx - p.x)*0.03 + Math.cos(a)*0.6)*${s.flowSpeed};
-        p.vy += ((p.ty - p.y)*0.03 + Math.sin(a)*0.6)*${s.flowSpeed};
-        const md = Math.hypot(p.x-mx, p.y-my);
-        if(md < 70 && md > 0){ p.vx += ((p.x-mx)/md)*8; p.vy += ((p.y-my)/md)*8; }
-        p.vx *= 0.88; p.vy *= 0.88; p.x += p.vx; p.y += p.vy;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
-        ctx.fillStyle = '${s.glowColor}'; ctx.shadowBlur = 6; ctx.shadowColor = '${s.glowColor}'; ctx.fill();
+      ctx.fillStyle = 'rgba(1, 4, 9, 0.2)';
+      ctx.fillRect(0, 0, w, h);
+      t += 0.02 * ${s.flowSpeed || 1.5};
+
+      for (let i = 0; i < parts.length; i++) {
+        const p = parts[i];
+        const a = Math.sin(p.x * 0.005 + t) * Math.cos(p.y * 0.005 + t) * Math.PI * 2;
+        p.vx += ((p.tx - p.x) * 0.03 + Math.cos(a) * 0.6) * ${s.flowSpeed || 1.5};
+        p.vy += ((p.ty - p.y) * 0.03 + Math.sin(a) * 0.6) * ${s.flowSpeed || 1.5};
+
+        const md = Math.hypot(p.x - mx, p.y - my);
+        if (md < 80 && md > 0) {
+          p.vx += ((p.x - mx) / md) * 8;
+          p.vy += ((p.y - my) / md) * 8;
+        }
+
+        p.vx *= 0.88;
+        p.vy *= 0.88;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.colorMix > 0.5 ? '${s.glowColor || '#10b981'}' : '${s.accentColor || '#06b6d4'}';
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = '${s.glowColor || '#10b981'}';
+        ctx.fill();
       }
       requestAnimationFrame(tick);
     }
-    tick();
+    requestAnimationFrame(tick);
   </script>
 </body>
 </html>`;

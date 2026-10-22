@@ -439,6 +439,65 @@ class AppController {
     }
   }
 
+  openCodeModal() {
+    this.updateCodeModalContent();
+    if (this.dom.codeModal) {
+      this.dom.codeModal.classList.remove('hidden');
+    }
+  }
+
+  async copyTextToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (err) {
+        console.warn('navigator.clipboard.writeText mislukt, fallback wordt gebruikt:', err);
+      }
+    }
+    return this.fallbackCopyText(text);
+  }
+
+  fallbackCopyText(text) {
+    return new Promise((resolve, reject) => {
+      let textArea = null;
+      try {
+        textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'fixed';
+        textArea.style.top = '0';
+        textArea.style.left = '0';
+        textArea.style.width = '2em';
+        textArea.style.height = '2em';
+        textArea.style.padding = '0';
+        textArea.style.border = 'none';
+        textArea.style.outline = 'none';
+        textArea.style.boxShadow = 'none';
+        textArea.style.background = 'transparent';
+        textArea.style.opacity = '0.01';
+        textArea.style.zIndex = '-9999';
+        document.body.appendChild(textArea);
+        textArea.focus({ preventScroll: true });
+        textArea.select();
+        textArea.setSelectionRange(0, text.length);
+        const success = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        textArea = null;
+        if (success) {
+          resolve(true);
+        } else {
+          reject(new Error('execCommand niet ondersteund'));
+        }
+      } catch (err) {
+        if (textArea && textArea.parentNode) {
+          document.body.removeChild(textArea);
+        }
+        reject(err);
+      }
+    });
+  }
+
   bindGlobalEvents() {
     // Search
     this.dom.effectSearch.addEventListener('input', (e) => {
@@ -498,8 +557,7 @@ class AppController {
 
     // Code Modal
     this.dom.btnOpenCode.addEventListener('click', () => {
-      this.updateCodeModalContent();
-      this.dom.codeModal.classList.remove('hidden');
+      this.openCodeModal();
     });
 
     this.dom.btnCloseModal.addEventListener('click', () => {
@@ -514,20 +572,38 @@ class AppController {
 
     // Quick Copy Button in stage header
     if (this.dom.btnQuickCopy) {
-      this.dom.btnQuickCopy.addEventListener('click', () => {
+      this.dom.btnQuickCopy.addEventListener('click', async () => {
         if (!this.currentEffect || typeof this.currentEffect.getCode !== 'function') return;
         const code = this.currentEffect.getCode(this.currentSettings);
-        navigator.clipboard.writeText(code).then(() => {
+        try {
+          await this.copyTextToClipboard(code);
           const originalHTML = this.dom.btnQuickCopy.innerHTML;
-          this.dom.btnQuickCopy.innerHTML = `<span>✓ Gekopieerd!</span>`;
+          this.dom.btnQuickCopy.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>✓ Gekopieerd!</span>
+          `;
           this.dom.btnQuickCopy.style.background = '#10b981';
+          this.dom.btnQuickCopy.style.borderColor = '#10b981';
           setTimeout(() => {
             this.dom.btnQuickCopy.innerHTML = originalHTML;
             this.dom.btnQuickCopy.style.background = '';
+            this.dom.btnQuickCopy.style.borderColor = '';
           }, 2000);
-        }).catch(err => {
-          alert('Kopiëren mislukt: ' + err);
-        });
+        } catch (err) {
+          // If automatic copy is blocked by browser permissions, open code modal with code preloaded & selected
+          this.openCodeModal();
+          const range = document.createRange();
+          range.selectNodeContents(this.dom.codeContent);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          if (this.dom.copyNotice) {
+            this.dom.copyNotice.textContent = 'Druk op Ctrl+C (of Cmd+C) om de geselecteerde HTML te kopiëren!';
+            this.dom.copyNotice.classList.add('copied');
+          }
+        }
       });
     }
 
@@ -542,9 +618,10 @@ class AppController {
     });
 
     // Copy Code Button
-    this.dom.btnCopyCode.addEventListener('click', () => {
+    this.dom.btnCopyCode.addEventListener('click', async () => {
       const code = this.dom.codeContent.textContent;
-      navigator.clipboard.writeText(code).then(() => {
+      try {
+        await this.copyTextToClipboard(code);
         this.dom.copyNotice.textContent = '✓ Gekopieerd naar klembord! Plak direct in je eigen bestand.';
         this.dom.copyNotice.classList.add('copied');
         this.dom.btnCopyCode.style.background = '#10b981';
@@ -553,9 +630,15 @@ class AppController {
           this.dom.copyNotice.classList.remove('copied');
           this.dom.btnCopyCode.style.background = '';
         }, 2500);
-      }).catch(err => {
-        alert('Kopiëren mislukt: ' + err);
-      });
+      } catch (err) {
+        // Fallback: select text inside code element
+        const range = document.createRange();
+        range.selectNodeContents(this.dom.codeContent);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        this.dom.copyNotice.textContent = 'Selectie actief: Druk op Ctrl+C om te kopiëren!';
+      }
     });
 
     // Presets
