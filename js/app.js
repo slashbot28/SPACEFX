@@ -332,12 +332,17 @@ class AppController {
         });
       } else if (ctrl.type === 'select') {
         const curVal = this.currentSettings[ctrl.key];
+        const optionsHtml = ctrl.options.map(opt => {
+          const val = typeof opt === 'object' && opt !== null ? opt.value : opt;
+          const lbl = typeof opt === 'object' && opt !== null ? opt.label : opt;
+          return `<option value="${val}" ${val === curVal ? 'selected' : ''}>${lbl}</option>`;
+        }).join('');
         group.innerHTML = `
           <div class="control-label-row">
             <label class="control-label">${ctrl.label}</label>
           </div>
           <select class="control-select" id="input-${ctrl.key}">
-            ${ctrl.options.map(opt => `<option value="${opt}" ${opt === curVal ? 'selected' : ''}>${opt}</option>`).join('')}
+            ${optionsHtml}
           </select>
         `;
         const select = group.querySelector(`#input-${ctrl.key}`);

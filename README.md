@@ -248,6 +248,20 @@ Click **"Code & Export"** on any effect to open the export dialog:
 46. **`super-mario` — Pure CSS 8-bit Animation:** Nostalgic retro pixel art animation.
 47. **`eye-candy` — Ambient Chromatic Flow:** Calming chromatic ambient color gradients.
 48. **`fractalkitty-clock` — there is – such that (Mathematical Clock):** Sophia's (@fractalkitty) poetic animated clock composed via generative vector grammar in p5.js with raven, crow, and magpie time hands.
+49. **`jpbelley-vertical-fan` — Vertical Fan (Text Loop Timeline):** JP Belley's rhythmic vertical typography fan with custom word lists and fonts.
+50. **`cbolson-two-sides` — Two Sides (Split Screen Mask):** Chris Bolson's bold dual-mask diagonal split typography & icon presentation.
+51. **`lurkmoophy-melty-text` — Melty Liquid SVG Text Filter:** Luke Murphy's dripping, melting typography powered by SVG `<feTurbulence>` and `<feDisplacementMap>`.
+52. **`amit-spiky-sphere` — Colorful Spiky Sphere 3D:** Amit Sheen's mathematical 3D pulsating spiky sphere built with pure CSS keyframes.
+53. **`blackstar-wave-text` — Customizable Wave Text Path:** BlackStar1991's undulating sine-wave typography along an animated SVG path.
+54. **`ccrch-white-stripes` — The White Stripes Canvas Waves:** ccrch's dynamic oscilloscope-style rock aesthetic canvas sine wave flow.
+55. **`hollandblumer-shuffle-grid` — 3D Double-Bend Card Shuffle:** Holland Blumer's dynamic card deck bridge shuffling seamlessly into a photo grid.
+56. **`shubniggurath-gradient-drift` — Gradient Drift (WebGL Fluid):** shubniggurath's luxurious chromatic fluid gradient simulation on GPU.
+57. **`jdillon-neon-radio` — Glitchy Cyberpunk Neon Radio Switches:** J Dillon's glowing neon radio controls with electric sparks and GSAP micro-glitches.
+58. **`prisoner849-ephemeral-flower` — Ephemeral Flower #2 (Three.js):** Paul West's procedural parametric flower with custom vertex shader displacement.
+59. **`daniel-munoz-infinite-gallery` — Infinite Cylinder Media Gallery:** Daniel Muñoz's 3D rotating cylinder roll gallery with smooth inertia scroll in Three.js.
+60. **`amit-infinite-roll` — Infinite Roll (Pure CSS 3D Typography):** Amit Sheen's continuous 3D rolling letter ribbon over a specular mirror floor.
+61. **`yukiloz7-glsl-sample027` — GLSL Sample027 (Shader Raymarch):** Yuki's Signed Distance Function (SDF) raymarching shader with chromatic bloom.
+62. **`yukiloz7-threejs-generative` — Three.js Generative Art:** Yuki's parametric 3D wireframe geometric crystal lattice.
 
 ---
 
