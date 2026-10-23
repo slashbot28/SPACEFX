@@ -247,6 +247,7 @@ Click **"Code & Export"** on any effect to open the export dialog:
 45. **`water-ripples-2d` — 2D Surface Ripples:** Mathematical surface damping wave grid.
 46. **`super-mario` — Pure CSS 8-bit Animation:** Nostalgic retro pixel art animation.
 47. **`eye-candy` — Ambient Chromatic Flow:** Calming chromatic ambient color gradients.
+48. **`fractalkitty-clock` — there is – such that (Mathematical Clock):** Sophia's (@fractalkitty) poetic animated clock composed via generative vector grammar in p5.js with raven, crow, and magpie time hands.
 
 ---
 
@@ -294,7 +295,9 @@ SPACEFX/
         ├── audio.js            # Audio visualizer spectrums & wave circles
         ├── svg.js              # Dynamic SVG text path drawing
         ├── fireworks.js        # Sound-driven fireworks simulation
-        └── special.js          # Bad TV CRT shader, Doom Fire, Hacker Text
+        ├── special.js          # Bad TV CRT shader, Doom Fire, Hacker Text
+        ├── liam_egan.js        # Liam Egan shaders, Fluid raymarch, Aurora
+        └── fractalkitty.js     # Sophia's "there is – such that" generative clock
 ```
 
 ---
