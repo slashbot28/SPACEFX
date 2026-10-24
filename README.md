@@ -4,7 +4,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/slashbot28/SPACEFX?style=for-the-badge)](https://github.com/slashbot28/SPACEFX)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-> **SPACEFX** is an interactive studio and curated library of **47+ visual web effects**, WebGL fragment shaders, physics simulations, audio-reactive visualizers, and dynamic animations.
+> **SPACEFX** is an interactive studio and curated library of **72+ visual web effects**, WebGL fragment shaders, physics simulations, audio-reactive visualizers, procedural Web Audio music synthesizers, and dynamic animations.
 > Everything runs on pure **Vanilla JavaScript** (zero external frameworks or npm runtime dependencies) and can be customized live, exported as standalone HTML, downloaded offline, or opened directly in CodePen with a single click.
 
 * 🌐 **Live Production URL:** [https://spacefx.web.app](https://spacefx.web.app) *(or [https://spacefx.firebaseapp.com](https://spacefx.firebaseapp.com))*
@@ -24,7 +24,8 @@
    - [3. 🎲 1-Click "Magic Themes" & Randomizer](#3--1-click-magic-themes--randomizer)
    - [4. 📺 Zen Screensaver & Auto-Tour Showreel](#4--zen-screensaver--auto-tour-showreel)
    - [5. 💾 1-Click Export, HTML Download & CodePen](#5--1-click-export-html-download--codepen)
-5. [Complete Catalog of All 47 Effects](#-complete-catalog-of-all-47-effects)
+5. [Complete Catalog of All 72 Effects](#-complete-catalog-of-all-72-effects)
+   - [ShaderToy Audio-Reactive Visualizers (With Real Web Audio Music)](#-shadertoy-audio-reactive-visualizers-with-real-web-audio-music)
    - [Liam Egan Signature Series](#-liam-egan-signature-series)
    - [Legendary Physics & Shaders](#-legendary-physics--shaders)
    - [Background Visuals](#-background-visuals)
@@ -149,7 +150,21 @@ Click **"Code & Export"** on any effect to open the export dialog:
 
 ---
 
-## 🌟 Complete Catalog of All 47 Effects
+## 🌟 Complete Catalog of All 72 Effects
+
+### 🎵 ShaderToy Audio-Reactive Visualizers (With Real Web Audio Music)
+These 10 effects feature native WebGL GLSL fragment raymarching powered by our built-in **Web Audio API procedural music synthesizer** (playing multi-track Synthwave, Ambient, Chillout Lofi, Hypnotic Acid Techno, Ocean Drones, or Live Microphone Input) with an interactive floating canvas HUD:
+
+* **`shadertoy-lunchbreak` — Lunchbreak (Audio-Reactive Raymarching):** Hypnotic raymarched organic architecture and reflective metallic surfaces undulating to bass frequencies (based on nabr's `flGyWc`).
+* **`shadertoy-sound-flower` — Sound Flower (Audio Mandala):** Kaleidoscopic sacred geometry mandala with harmonic frequency rings blooming on audio peaks (based on `Xs3GWj`).
+* **`shadertoy-neon-tunnel` — Neon Hyperspace Sound Tunnel:** High-speed infinite wireframe neon warp drive tunnel responding to audio energy (based on `MdVXzw`).
+* **`shadertoy-tetris-dimension` — The Tetris Dimension (Voxel Glitch Beat):** Surreal cybernetic dimension of falling voxel blocks, grid pulses, and audio-reactive scanlines (based on Hyeve's `NtByzD`).
+* **`shadertoy-happy-glow-cruise` — Happy Glow Cruise (Vaporwave Synth Horizon):** Retrowave sun, glowing wireframe grid terrain, and atmospheric mountain ridges with pulsating beats (based on diatribes' `3ccyD7`).
+* **`shadertoy-glass-origin` — Glass Origin (Refractive Crystal Core):** Complex internal light caustics, chromatic dispersion, and prismatic refraction inside a floating crystal (based on Frostbyte_'s `scS3Wy`).
+* **`shadertoy-fibonacci-zoom` — Extruded Fibonacci Zoom (Golden Spiral Fractal):** Infinite logarithmic spiral architecture zooming smoothly with frequency spectrum feedback (based on Shane's `sfVGDG`).
+* **`shadertoy-cave-diving` — Cave Diving (Bioluminescent Sub-surface):** Volumetric organic cave system illuminated by glowing bioluminescent deep-sea flora responding to sub-bass drones (based on Elsio's `XcVyWD`).
+* **`shadertoy-grid-attractor` — Grid Attractor (Cybernetic Sound Matrix):** Kinetic dot grid warped by gravity attractors and sound waves with interactive mouse physics (based on takumifukasawa's `43cBzn`).
+* **`shadertoy-quantum-pulse` — Quantum Pulse (Plasma Fusion Core):** Blazing plasma energy reactor with solar flares and harmonic shockwaves bursting on bass transients (based on `tfBXzD`).
 
 ### 🌌 Liam Egan Signature Series
 1. **`manifold-mandala` — Manifold Mandala**
