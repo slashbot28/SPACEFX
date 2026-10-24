@@ -9,76 +9,61 @@ window.EffectRegistry = window.EffectRegistry || {};
 // 1. Vertical Fan — Text Loop Timeline
 // Author: JP Belley (@jpbelley) (https://codepen.io/jpbelley/pen/JobwWaP)
 // --------------------------------------------------------
+
+// --------------------------------------------------------
+// 1. Vertical Fan — Text Loop Timeline
+// Author: JP Belley (@jpbelley) (https://codepen.io/jpbelley/pen/JobwWaP)
+// Enhanced with Word Cycling, Motion Fan Rotation, Scroll Parallax & Glow
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// 1. Vertical Fan — Text Loop Timeline
+// Author: JP Belley (@jpbelley) (https://codepen.io/jpbelley/pen/JobwWaP)
+// Enhanced with Word Cycling, Motion Fan Rotation, Scroll Parallax & Glow
+// --------------------------------------------------------
 window.EffectRegistry['jpbelley-vertical-fan'] = {
   id: 'jpbelley-vertical-fan',
   title: "Vertical Fan — Text Loop Timeline",
   category: 'Special / Experimental',
-  tech: 'GSAP Typography Timeline',
+  tech: 'Typography Timeline & Dynamic Fan',
   github: 'https://codepen.io/jpbelley/pen/JobwWaP',
-  description: "Typografische verticale waaier-animatie met looping tekst, instelbare lettertypen en snelheidscontrole.",
+  description: "Typografische verticale waaier met automatische woordenwissel, boogrotaties, interactieve scroll/parallax en neon glow.",
   defaultSettings: {
-  "fontFamily": "'Recursive', sans-serif",
-  "customWords": "DESIGN,MOTION,CODE,FUTURE,VISION",
-  "speed": 1,
-  "textColor": "#e8eaf0",
-  "bgColor": "#080710"
-},
+    fontFamily: "'Recursive', sans-serif",
+    customWords: "DESIGN, MOTION, CODE, FUTURE, VISION",
+    speed: 1.0,
+    fanMotion: "fan-arc",
+    glowColor: "#6366f1",
+    textColor: "#e8eaf0",
+    bgColor: "#080710"
+  },
   controls: [
-  {
-    "type": "select",
-    "key": "fontFamily",
-    "label": "Lettertype (Font)",
-    "options": [
-      {
-        "value": "'Recursive', sans-serif",
-        "label": "Recursive (Modern Variable)"
-      },
-      {
-        "value": "'Montserrat', sans-serif",
-        "label": "Montserrat (Geometric Bold)"
-      },
-      {
-        "value": "'Cinzel', serif",
-        "label": "Cinzel (Classical Elegant)"
-      },
-      {
-        "value": "'Fira Code', monospace",
-        "label": "Fira Code (Cyber Monospace)"
-      },
-      {
-        "value": "'Orbitron', sans-serif",
-        "label": "Orbitron (Futuristic Sci-Fi)"
-      },
-      {
-        "value": "'Pacifico', cursive",
-        "label": "Pacifico (Retro Script)"
-      }
-    ]
-  },
-  {
-    "type": "text",
-    "key": "customWords",
-    "label": "Woordenlijst (komma gescheiden)"
-  },
-  {
-    "type": "range",
-    "key": "speed",
-    "label": "Animatie Snelheid",
-    "min": 0.2,
-    "max": 3,
-    "step": 0.1
-  },
-  {
-    "type": "color",
-    "key": "textColor",
-    "label": "Tekstkleur"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrondkleur"
-  }
-],
+    {
+      type: "select", key: "fontFamily", label: "Lettertype (Font)",
+      options: [
+        { value: "'Recursive', sans-serif", label: "Recursive (Modern Variable)" },
+        { value: "'Montserrat', sans-serif", label: "Montserrat (Geometric Bold)" },
+        { value: "'Orbitron', sans-serif", label: "Orbitron (Futuristic Sci-Fi)" },
+        { value: "'Cinzel', serif", label: "Cinzel (Classical Elegant)" },
+        { value: "'Fira Code', monospace", label: "Fira Code (Cyber Monospace)" },
+        { value: "'Pacifico', cursive", label: "Pacifico (Retro Script)" },
+        { value: "'Space Grotesk', sans-serif", label: "Space Grotesk" }
+      ]
+    },
+    { type: "text", key: "customWords", label: "Woordenlijst (komma gescheiden)" },
+    {
+      type: "select", key: "fanMotion", label: "Waaier Animatie Stijl",
+      options: [
+        { value: "fan-arc", label: "Waaier Boog & Hoek Rotatie" },
+        { value: "wave-pulse", label: "Sinusgolf Puls & Uitschuiven" },
+        { value: "spiral-tilt", label: "3D Spiraal & Diepte Tilt" }
+      ]
+    },
+    { type: "range", key: "speed", label: "Animatie Snelheid", min: 0.2, max: 3.0, step: 0.1 },
+    { type: "color", key: "glowColor", label: "Neon Gloed Tint" },
+    { type: "color", key: "textColor", label: "Tekstkleur" },
+    { type: "color", key: "bgColor", label: "Achtergrondkleur" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -108,129 +93,263 @@ window.EffectRegistry['jpbelley-vertical-fan'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!DOCTYPE html>\n<html lang=\"en\" >\n\n<head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n  \n  <meta charset=\"UTF-8\">\n  \n\n    <link rel=\"apple-touch-icon\" type=\"image/png\" href=\"https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png\" />\n\n    <meta name=\"apple-mobile-web-app-title\" content=\"CodePen\">\n\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico\" />\n\n    <link rel=\"mask-icon\" type=\"image/x-icon\" href=\"https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg\" color=\"#111\" />\n\n\n\n  \n    <script src=\"https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js\"></script>\n\n\n  <title>Vertical Fan | Text Loop Timeline Animation</title>\n\n    <link rel=\"canonical\" href=\"https://codepen.io/jpbelley/pen/JobwWaP\">\n  \n  \n  \n  \n<style>\n*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n\nbody {\n  background: #080710;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  overflow: hidden;\n}\n\n#stage {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.text {\n  font-family: 'Recursive', sans-serif;\n  font-size: clamp(52px, 10vw, 116px);\n  font-weight: 400;\n  color: rgba(232, 234, 240, 0.92);\n  letter-spacing: -0.02em;\n  line-height: 1;\n  display: flex;\n}\n\n.ghost-layer {\n  opacity: 0.14;\n  user-select: none;\n  pointer-events: none;\n}\n\n.char {\n  display: inline-block;\n  white-space: pre;\n  will-change: transform, opacity;\n}\n\n#credit {\n  position: fixed;\n  bottom: 20px;\n  right: 24px;\n  font-family: 'DM Mono', monospace;\n  font-size: 22px;\n  font-weight: 300;\n  letter-spacing: 0.1em;\n  color: rgba(255,255,255,0.9);\n  text-decoration: none;\n  transition: color 0.2s;\n  z-index: 10;\n}\n#credit:hover { color: rgba(255,255,255,0.55); }\n#credit span { color: rgba(255,255,255,0.4); }\n</style>\n\n  <script>\n  window.console = window.console || function(t) {};\n</script>\n\n  \n  \n</head>\n\n<body translate=\"no\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO,slnt,CRSV@300..1000,0..1,0..1,-15..0,0..1&display=swap\" rel=\"stylesheet\">\n\n<div id=\"stage\"></div>\n\n<a href=\"https://jeanphilippebelley.com/\" target=\"_blank\" id=\"credit\">\n  JP<span>.</span>\n</a>\n  \n    <script id=\"rendered-js\" >\n// ─── Config ───────────────────────────���───────────────────────────────────────\nconst WORD = 'Always';\nconst STAGE = document.getElementById('stage');\n\n// ─── Loop & run ───────────────────────────────────────────────────────────────\nlet _raf = null;\nfunction loop(tick) {\n  cancelAnimationFrame(_raf);\n  (function frame() {tick();_raf = requestAnimationFrame(frame);})();\n}\nfunction run(fn) {fn();}\n\n// ─── Easing ────────────────────────────────────────────────────\nconst ease = {\n  out: t => 1 - (1 - t) ** 3,\n  in: t => t ** 3,\n  inOut: t => t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2,\n  outBack: t => {const c = 1.70158 + 1;return 1 + c * (t - 1) ** 3 + 1.70158 * (t - 1) ** 2;},\n  bounce: t => {\n    const n = 7.5625,d = 2.75;\n    if (t < 1 / d) return n * t * t;\n    if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75;\n    if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375;\n    return n * (t -= 2.625 / d) * t + 0.984375;\n  } };\n\n\n// ─── Cycle progress ──────────────────────────────────���────────────────\n// Returns 0 (at home) → 1 (at target) → 0 (back home) on a fixed timing loop.\n// When p = 0: live letter is invisible — ghost shows the home position.\n// When p = 1: live letter is fully visible at its displaced position.\nfunction cyc(f, offset, enter, hold, exit, pause, eIn = ease.out, eOut = ease.in) {\n  if (f < offset) return 0;\n  const total = enter + hold + exit + pause;\n  const t = (f - offset) % total;\n  if (t < enter) return eIn(t / enter);\n  if (t < enter + hold) return 1;\n  if (t < enter + hold + exit) return 1 - eOut((t - enter - hold) / exit);\n  return 0;\n}\n\nconst lerp = (a, b, t) => a + (b - a) * t;\n\n// ─── Ghost setup ──────────────────────────────────────────────────────────────\n// Builds two overlapping layers inside #stage:\n//\n//   .ghost-layer  — static word at 14% opacity, always visible, gives natural\n//                   width/height so the wrapper holds its size.\n//   .live-layer   — absolutely positioned on top, same chars start at opacity 0.\n//                   Animations move these chars and fade them in/out with p.\n//\n// When p = 0  → live letter invisible, ghost reads as the home position.\n// When p = 1  → live letter fully visible at displaced position, ghost faint.\n// As p → 0    → live letter fades out, ghost seamlessly takes over.\n//\n// Returns an array of the live <span> elements (one per character).\nfunction setup(text = WORD) {\n  STAGE.innerHTML = '';\n\n  const wrap = document.createElement('div');\n  wrap.style.cssText = 'position:relative; display:inline-flex; align-items:center; justify-content:center;';\n  STAGE.appendChild(wrap);\n\n  const ghostEl = document.createElement('div');\n  ghostEl.className = 'text ghost-layer';\n  ghostEl.setAttribute('aria-hidden', 'true');\n\n  const liveEl = document.createElement('div');\n  liveEl.className = 'text';\n  liveEl.style.cssText = 'position:absolute; top:0; left:0; display:flex; pointer-events:none;';\n\n  const chars = text.split('').map(ch => {\n    const gc = ch === ' ' ? '\\u00a0' : ch;\n\n    const g = document.createElement('span');\n    g.className = 'char';\n    g.textContent = gc;\n    ghostEl.appendChild(g);\n\n    const l = document.createElement('span');\n    l.className = 'char';\n    l.textContent = gc;\n    l.style.opacity = '1';\n    liveEl.appendChild(l);\n\n    return l;\n  });\n\n  wrap.appendChild(ghostEl);\n  wrap.appendChild(liveEl);\n  return chars;\n}\n\n// Vertical Fan\nfunction vertical_fan() {\n  const chars = setup();\n  const N = chars.length;\n  let f = 0;\n  loop(() => {\n    const center = (N - 1) / 2;\n    chars.forEach((ch, i) => {\n      const p = cyc(f, i * 5, 40, 40, 36, 44, ease.out, ease.in);\n      const dist = Math.abs(i - center) * 32 + 22;\n      const dir = i % 2 === 0 ? -1 : 1;\n      ch.style.transform = `translateY(${dir * dist * p}px)`;\n    });\n    f++;\n  });\n}\n\nrun(vertical_fan);\n//# sourceURL=pen.js\n  </script>\n\n  \n</body>\n\n</html>\n";
+    const rawWords = (s.customWords || "DESIGN, MOTION, CODE, FUTURE, VISION")
+      .split(',')
+      .map(w => w.trim())
+      .filter(Boolean);
+    const wordsJson = JSON.stringify(rawWords.length ? rawWords : ["DESIGN", "MOTION", "CODE"]);
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        .text { font-family: ${s.fontFamily || "'Recursive', sans-serif"} !important; color: ${s.textColor || '#e8eaf0'} !important; }
-        body { background: ${s.bgColor || '#080710'} !important; }
-      `);
-      if (s.customWords) {
-        customScript += `
-          const newWords = ${JSON.stringify(s.customWords)}.split(',').map(w => w.trim()).filter(Boolean);
-          if (newWords.length > 0) {
-            const els = document.querySelectorAll('.text, [data-word]');
-            els.forEach((el, idx) => {
-              el.textContent = newWords[idx % newWords.length];
-            });
-          }
-        `;
-      }
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>Vertical Fan | Text Loop Timeline</title>\n' +
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">\n' +
+'  <style>\n' +
+'    * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'    body {\n' +
+'      background: ' + (s.bgColor || '#080710') + ';\n' +
+'      min-height: 100vh;\n' +
+'      display: flex;\n' +
+'      align-items: center;\n' +
+'      justify-content: center;\n' +
+'      overflow: hidden;\n' +
+'      perspective: 800px;\n' +
+'      font-family: ' + (s.fontFamily || "'Recursive', sans-serif") + ';\n' +
+'    }\n' +
+'    #stage-wrap {\n' +
+'      position: relative;\n' +
+'      display: flex;\n' +
+'      align-items: center;\n' +
+'      justify-content: center;\n' +
+'      transition: transform 0.15s ease-out;\n' +
+'      transform-style: preserve-3d;\n' +
+'    }\n' +
+'    .text {\n' +
+'      font-family: inherit;\n' +
+'      font-size: clamp(48px, 9vw, 110px);\n' +
+'      font-weight: 800;\n' +
+'      color: ' + (s.textColor || '#e8eaf0') + ';\n' +
+'      letter-spacing: -0.02em;\n' +
+'      line-height: 1;\n' +
+'      display: flex;\n' +
+'      text-shadow: 0 0 20px ' + (s.glowColor || '#6366f1') + '88, 0 0 40px ' + (s.glowColor || '#6366f1') + '44;\n' +
+'    }\n' +
+'    .ghost-layer {\n' +
+'      opacity: 0.18;\n' +
+'      user-select: none;\n' +
+'      pointer-events: none;\n' +
+'      filter: blur(1px);\n' +
+'    }\n' +
+'    .char {\n' +
+'      display: inline-block;\n' +
+'      white-space: pre;\n' +
+'      will-change: transform, opacity, filter;\n' +
+'      transition: text-shadow 0.3s;\n' +
+'    }\n' +
+'    .char:hover {\n' +
+'      color: #ffffff;\n' +
+'      text-shadow: 0 0 30px ' + (s.glowColor || '#6366f1') + ', 0 0 60px ' + (s.glowColor || '#6366f1') + ';\n' +
+'    }\n' +
+'    #scroll-hint {\n' +
+'      position: fixed;\n' +
+'      bottom: 24px;\n' +
+'      left: 50%;\n' +
+'      transform: translateX(-50%);\n' +
+'      font-size: 0.78rem;\n' +
+'      color: rgba(255, 255, 255, 0.45);\n' +
+'      letter-spacing: 0.15em;\n' +
+'      text-transform: uppercase;\n' +
+'      display: flex;\n' +
+'      align-items: center;\n' +
+'      gap: 8px;\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <div id="stage-wrap">\n' +
+'    <div id="stage"></div>\n' +
+'  </div>\n' +
+'  <div id="scroll-hint">✦ Scroll of beweeg muis voor waaier-reactie ✦</div>\n' +
+'  <script>\n' +
+'    const WORDS = ' + wordsJson + ';\n' +
+'    const SPEED_SCALE = ' + (s.speed || 1.0) + ';\n' +
+'    const FAN_STYLE = "' + (s.fanMotion || 'fan-arc') + '";\n' +
+'    const STAGE = document.getElementById("stage");\n' +
+'    const STAGE_WRAP = document.getElementById("stage-wrap");\n' +
+'\n' +
+'    let wordIndex = 0;\n' +
+'    let chars = [];\n' +
+'    let scrollBoost = 0;\n' +
+'    let mouseX = 0, mouseY = 0;\n' +
+'\n' +
+'    const ease = {\n' +
+'      out: t => 1 - Math.pow(1 - t, 3),\n' +
+'      in: t => Math.pow(t, 3),\n' +
+'      inOut: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2\n' +
+'    };\n' +
+'\n' +
+'    function cyc(f, offset, enter, hold, exit, pause) {\n' +
+'      if (f < offset) return 0;\n' +
+'      const total = enter + hold + exit + pause;\n' +
+'      const t = (f - offset) % total;\n' +
+'      if (t < enter) return ease.out(t / enter);\n' +
+'      if (t < enter + hold) return 1;\n' +
+'      if (t < enter + hold + exit) return 1 - ease.in((t - enter - hold) / exit);\n' +
+'      return 0;\n' +
+'    }\n' +
+'\n' +
+'    function setupWord(word) {\n' +
+'      STAGE.innerHTML = "";\n' +
+'      const wrap = document.createElement("div");\n' +
+'      wrap.style.cssText = "position:relative; display:inline-flex; align-items:center; justify-content:center;";\n' +
+'      STAGE.appendChild(wrap);\n' +
+'\n' +
+'      const ghostEl = document.createElement("div");\n' +
+'      ghostEl.className = "text ghost-layer";\n' +
+'      ghostEl.setAttribute("aria-hidden", "true");\n' +
+'\n' +
+'      const liveEl = document.createElement("div");\n' +
+'      liveEl.className = "text";\n' +
+'      liveEl.style.cssText = "position:absolute; top:0; left:0; display:flex; pointer-events:auto;";\n' +
+'\n' +
+'      chars = word.split("").map(ch => {\n' +
+'        const gc = ch === " " ? "\u00a0" : ch;\n' +
+'        const g = document.createElement("span");\n' +
+'        g.className = "char";\n' +
+'        g.textContent = gc;\n' +
+'        ghostEl.appendChild(g);\n' +
+'\n' +
+'        const l = document.createElement("span");\n' +
+'        l.className = "char";\n' +
+'        l.textContent = gc;\n' +
+'        liveEl.appendChild(l);\n' +
+'        return l;\n' +
+'      });\n' +
+'\n' +
+'      wrap.appendChild(ghostEl);\n' +
+'      wrap.appendChild(liveEl);\n' +
+'    }\n' +
+'\n' +
+'    setupWord(WORDS[0]);\n' +
+'\n' +
+'    // Scroll / Wheel interaction\n' +
+'    window.addEventListener("wheel", (e) => {\n' +
+'      scrollBoost = Math.max(-50, Math.min(50, scrollBoost + e.deltaY * 0.15));\n' +
+'    }, { passive: true });\n' +
+'\n' +
+'    // Mouse parallax tilt\n' +
+'    window.addEventListener("pointermove", (e) => {\n' +
+'      mouseX = (e.clientX / window.innerWidth - 0.5) * 30;\n' +
+'      mouseY = (e.clientY / window.innerHeight - 0.5) * 20;\n' +
+'    });\n' +
+'\n' +
+'    let frame = 0;\n' +
+'    const cycleLength = 160;\n' +
+'\n' +
+'    function tick() {\n' +
+'      frame += SPEED_SCALE;\n' +
+'      scrollBoost *= 0.94; // smooth damping\n' +
+'\n' +
+'      const N = chars.length;\n' +
+'      const center = (N - 1) / 2;\n' +
+'\n' +
+'      // Parallax on stage\n' +
+'      STAGE_WRAP.style.transform = "rotateX(" + (-mouseY) + "deg) rotateY(" + mouseX + "deg)";\n' +
+'\n' +
+'      chars.forEach((ch, i) => {\n' +
+'        const p = cyc(frame, i * 6, 36, 40, 36, 48);\n' +
+'        const dist = Math.abs(i - center) * 34 + 24 + Math.abs(scrollBoost);\n' +
+'        const dir = i % 2 === 0 ? -1 : 1;\n' +
+'\n' +
+'        let transformStr = "";\n' +
+'        if (FAN_STYLE === "fan-arc") {\n' +
+'          const rotAngle = dir * (dist / 22) * p * 6;\n' +
+'          transformStr = "translateY(" + (dir * dist * p) + "px) rotate(" + rotAngle + "deg) scale(" + (1 + p * 0.12) + ")";\n' +
+'        } else if (FAN_STYLE === "wave-pulse") {\n' +
+'          const wave = Math.sin(frame * 0.08 + i * 0.7) * 45 * p;\n' +
+'          transformStr = "translateY(" + wave + "px) scale(" + (1 + p * 0.2) + ")";\n' +
+'        } else {\n' +
+'          const zDist = Math.sin(p * Math.PI) * 80;\n' +
+'          transformStr = "translateY(" + (dir * dist * p * 0.8) + "px) translateZ(" + zDist + "px) rotateX(" + (dir * p * 25) + "deg)";\n' +
+'        }\n' +
+'\n' +
+'        ch.style.transform = transformStr;\n' +
+'        ch.style.opacity = (0.2 + p * 0.8).toFixed(2);\n' +
+'      });\n' +
+'\n' +
+'      // Auto cycle through words when a full wave concludes\n' +
+'      if (WORDS.length > 1 && frame > cycleLength) {\n' +
+'        frame = 0;\n' +
+'        wordIndex = (wordIndex + 1) % WORDS.length;\n' +
+'        setupWord(WORDS[wordIndex]);\n' +
+'      }\n' +
+'\n' +
+'      requestAnimationFrame(tick);\n' +
+'    }\n' +
+'\n' +
+'    requestAnimationFrame(tick);\n' +
+'  <\/script>\n' +
+'</body>\n' +
+'</html>';
   }
 };
 
 // --------------------------------------------------------
-// 2. Two Sides — Dual Split SVG Mask
+// 2. Two Sides — Dual Split SVG Mask & 3D Frame
 // Author: Chris Bolson (@cbolson) (https://codepen.io/editor/cbolson/pen/019faec6-938b-73ab-bd3e-71ba9d1d053e)
+// Enhanced with Dual-Text (Left/Right), Decorative Framing & Interactive Tilt
 // --------------------------------------------------------
 window.EffectRegistry['cbolson-two-sides'] = {
   id: 'cbolson-two-sides',
-  title: "Two Sides — Dual Split SVG Mask",
+  title: "Two Sides — Dual Split 3D Frames",
   category: 'Css 3D Effect',
-  tech: 'SVG Dual Split & CSS',
+  tech: 'SVG Dual Split & 3D Perspective',
   github: 'https://codepen.io/editor/cbolson/pen/019faec6-938b-73ab-bd3e-71ba9d1d053e',
-  description: "Gesplitste dual-layer presentatie met diagonale interactie en contrasterende kleuren.",
+  description: "Gesplitste dual-layer 3D presentatie met afzonderlijke tekst per zijde, decoratieve kaders en 3D muistilt.",
   defaultSettings: {
-  "fontFamily": "'Montserrat', sans-serif",
-  "customText": "2.0",
-  "primaryColor": "#00d2ff",
-  "accentColor": "#ff2d55",
-  "bgColor": "#08080c"
-},
+    fontFamily: "'Montserrat', sans-serif",
+    frontText: "SPACE",
+    backText: "FX 2.0",
+    frameStyle: "corners",
+    primaryColor: "#00d2ff",
+    accentColor: "#ff2d55",
+    bgColor: "#08080c"
+  },
   controls: [
-  {
-    "type": "select",
-    "key": "fontFamily",
-    "label": "Lettertype (Font)",
-    "options": [
-      {
-        "value": "'Montserrat', sans-serif",
-        "label": "Montserrat (Bold Sans)"
-      },
-      {
-        "value": "'Cinzel', serif",
-        "label": "Cinzel (Serif Classic)"
-      },
-      {
-        "value": "'Fira Code', monospace",
-        "label": "Fira Code (Code)"
-      },
-      {
-        "value": "'Space Grotesk', sans-serif",
-        "label": "Space Grotesk"
-      }
-    ]
-  },
-  {
-    "type": "text",
-    "key": "customText",
-    "label": "Weergave Tekst"
-  },
-  {
-    "type": "color",
-    "key": "primaryColor",
-    "label": "Kleur Links"
-  },
-  {
-    "type": "color",
-    "key": "accentColor",
-    "label": "Kleur Rechts"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrondkleur"
-  }
-],
+    {
+      type: "select", key: "fontFamily", label: "Lettertype (Font)",
+      options: [
+        { value: "'Montserrat', sans-serif", label: "Montserrat (Bold Sans)" },
+        { value: "'Orbitron', sans-serif", label: "Orbitron (Sci-Fi)" },
+        { value: "'Cinzel', serif", label: "Cinzel (Serif Classic)" },
+        { value: "'Fira Code', monospace", label: "Fira Code (Code)" },
+        { value: "'Space Grotesk', sans-serif", label: "Space Grotesk" }
+      ]
+    },
+    { type: "text", key: "frontText", label: "Tekst Zijde 1 (Links/Voor)" },
+    { type: "text", key: "backText", label: "Tekst Zijde 2 (Rechts/Achter)" },
+    {
+      type: "select", key: "frameStyle", label: "Kader & Frame Stijl",
+      options: [
+        { value: "corners", label: "Cyberpunk Hoekaccenten (Notches)" },
+        { value: "double", label: "Dubbele Neon Rand (Layered Glow)" },
+        { value: "glass", label: "Frosted Glassmorphism Binnenrand" }
+      ]
+    },
+    { type: "color", key: "primaryColor", label: "Kleur Zijde 1 (Neon A)" },
+    { type: "color", key: "accentColor", label: "Kleur Zijde 2 (Neon B)" },
+    { type: "color", key: "bgColor", label: "Achtergrondkleur" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -243,7 +362,7 @@ window.EffectRegistry['cbolson-two-sides'] = {
     this.iframe.style.border = 'none';
     this.iframe.style.display = 'block';
     this.iframe.style.borderRadius = '8px';
-    this.iframe.setAttribute('title', "Two Sides — Dual Split SVG Mask");
+    this.iframe.setAttribute('title', "Two Sides — Dual Split 3D Frames");
 
     container.appendChild(this.iframe);
     this.renderIframe();
@@ -260,65 +379,143 @@ window.EffectRegistry['cbolson-two-sides'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n\n<meta property=\"og:description\" content=\"Made on CodePen by Chris Bolson\">\n<meta property=\"og:image\" content=\"https://019faec6-938b-73ab-bd3e-71ba9d1d053e.codepen.dev/.codepen/screenshots/eec73845d808cbac0c673434bf2cefe7caed97e0f12cfdd397f87ec822022961/1280.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<link rel=\"icon\" href=\"https://public.codepenassets.com/favicon/favicon.ico\">\n\n    <meta charset=\"UTF-8\">\n    <style>\n*,::before {\n\tbox-sizing: border-box;\n}\n\n@property --bg-angle {\n  inherits: false;\n  initial-value: 0turn;\n  syntax: '<angle>';\n}\n\n@keyframes gradient-spin {\n  to {\n    --bg-angle: 1turn;\n  }\n}\n\n:root {\n  --bg: conic-gradient(from var(--bg-angle, 0deg), rgb(255, 221, 64), rgb(71, 207, 115), rgb(14, 190, 255), rgb(174, 99, 228), rgb(255, 221, 64));\n  animation: gradient-spin 10s linear infinite;\n}\n\nbody {\n\tmin-height: 100vh;\n  background-image: linear-gradient(#FFFa, #FFFa), var(--bg);\n\t\n\tdisplay: grid;\n\tplace-content: center;\n\tperspective: 600px;\n}\n\n.two {\n  font-size: min(20vw, 60px);\n  width: 6em;\n\tdisplay: grid;\n\tplace-items: center;\n\t\n\ttransform-style: preserve-3d;\n\tanimation: --k-rotate 10s infinite reverse  linear;\n\t\n\t*,&::before{\n\t\tgrid-area: 1/1;\n\t\tborder: solid 0.25em transparent;\n\t  border-radius: 0.25em;\n\t  corner-shape: notch;\n\t}\n\t\n\t/* gradient */\n\t&::before{\n\t\tcontent: '';\n\t\twidth:100%;\n\t\theight:100%;\n\t\tbackground-image: var(--bg);\n\t  background-origin: border-box;\n\t\ttransform: translateZ(0);\n\t}\n  \n\tsvg{\n\t  background: #000a;\n\t\twidth: 80%;\n\t\theight:80%;\n\t\t&.v2{\n\t\t  padding: .5em;\n\t\t\tscale: -1 1;\n\t\t\tfill: #FFF;\n\t\t\ttransform: translateZ(-30px);\t\n\t\t}\n\t\t&.logo{\n\t\t\tcolor: white;\n\t\t\ttransform: translateZ(30px);\n\t\t}\n\t}\n}\n\n@keyframes --k-rotate{\n\tto{\n      transform: rotateY(360deg);\n\t}\n}\n</style>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>CodePen Challenge: Two</title>\n  </head>\n  <body>\n\n    <div class=\"two\">\n      <svg class=\"v2\" xmlns=\"http://www.w3.org/2000/svg\" xml:space=\"preserve\" viewBox=\"0 0 18 8\" shape-rendering=\"crispEdges\">\n\t      <text fill-opacity=\"0\" stroke-opacity=\"0\" x=\"18\" y=\"8\">2.0</text>\n\t      <path d=\"M7 8H0V4h1V3h4V2H0V0h6v1h1v3H6v1H3v1h4zm3 0H8V6h2zm7 0h-5V7h-1V1h1V0h5v1h1v6h-1zm-4-2h3V2h-3z\"/>\n\t    </svg>\n\n\t\t\t<svg class=\"logo\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 138 26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n  <path d=\"M80 6h-9v14h9 M114 6h-9 v14h9 M111 13h-6 M77 13h-6 M122 20V6l11 14V6 M22 16.7L33 24l11-7.3V9.3L33 2L22 9.3V16.7z M44 16.7L33 9.3l-11 7.4 M22 9.3l11 7.3 l11-7.3 M33 2v7.3 M33 16.7V24 M88 14h6c2.2 0 4-1.8 4-4s-1.8-4-4-4h-6v14 M15 8c-1.3-1.3-3-2-5-2c-4 0-7 3-7 7s3 7 7 7 c2 0 3.7-0.8 5-2 M64 13c0 4-3 7-7 7h-5V6h5C61 6 64 9 64 13z\"/>\n</svg>\n  </div>\n    \n  </body>\n</html>\n";
+    const fText = s.frontText || "SPACE";
+    const bText = s.backText || "FX 2.0";
+    const fStyle = s.frameStyle || "corners";
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        body { background: ${s.bgColor || '#08080c'} !important; }
-        .two text, .v2 text { font-family: ${s.fontFamily || "'Montserrat', sans-serif"} !important; fill: ${s.primaryColor || '#00d2ff'} !important; }
-        .logo { color: ${s.accentColor || '#ff2d55'} !important; }
-      `);
-      if (s.customText) {
-        customScript += `
-          const txtEl = document.querySelector('.v2 text, .two text');
-          if (txtEl) txtEl.textContent = ${JSON.stringify(s.customText)};
-        `;
-      }
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>Two Sides 3D</title>\n' +
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Fira+Code:wght@700&family=Montserrat:wght@800&family=Orbitron:wght@800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">\n' +
+'  <style>\n' +
+'    * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'    body {\n' +
+'      min-height: 100vh;\n' +
+'      background: ' + (s.bgColor || '#08080c') + ';\n' +
+'      display: grid;\n' +
+'      place-content: center;\n' +
+'      perspective: 900px;\n' +
+'      overflow: hidden;\n' +
+'      font-family: ' + (s.fontFamily || "'Montserrat', sans-serif") + ';\n' +
+'    }\n' +
+'    .card-container {\n' +
+'      width: min(90vw, 460px);\n' +
+'      height: 280px;\n' +
+'      position: relative;\n' +
+'      transform-style: preserve-3d;\n' +
+'      transition: transform 0.12s ease-out;\n' +
+'    }\n' +
+'    .spin-rig {\n' +
+'      width: 100%;\n' +
+'      height: 100%;\n' +
+'      position: absolute;\n' +
+'      transform-style: preserve-3d;\n' +
+'      animation: autoSpin 14s infinite linear;\n' +
+'    }\n' +
+'    @keyframes autoSpin {\n' +
+'      0% { transform: rotateY(0deg); }\n' +
+'      100% { transform: rotateY(360deg); }\n' +
+'    }\n' +
+'    .side {\n' +
+'      position: absolute;\n' +
+'      inset: 0;\n' +
+'      border-radius: 18px;\n' +
+'      display: flex;\n' +
+'      flex-direction: column;\n' +
+'      align-items: center;\n' +
+'      justify-content: center;\n' +
+'      backface-visibility: hidden;\n' +
+'      box-shadow: 0 20px 50px rgba(0,0,0,0.6);\n' +
+'      overflow: hidden;\n' +
+'    }\n' +
+'    .side.front {\n' +
+'      background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,41,59,0.95) 100%);\n' +
+'      border: 2px solid ' + (s.primaryColor || '#00d2ff') + ';\n' +
+'      color: ' + (s.primaryColor || '#00d2ff') + ';\n' +
+'      transform: translateZ(40px);\n' +
+'    }\n' +
+'    .side.back {\n' +
+'      background: linear-gradient(135deg, rgba(30,10,20,0.92) 0%, rgba(20,5,15,0.95) 100%);\n' +
+'      border: 2px solid ' + (s.accentColor || '#ff2d55') + ';\n' +
+'      color: ' + (s.accentColor || '#ff2d55') + ';\n' +
+'      transform: rotateY(180deg) translateZ(40px);\n' +
+'    }\n' +
+'    /* Decorative Frame Styles */\n' +
+'    .frame-corners::before, .frame-corners::after {\n' +
+'      content: "";\n' +
+'      position: absolute;\n' +
+'      width: 24px;\n' +
+'      height: 24px;\n' +
+'      border: 3px solid currentColor;\n' +
+'      pointer-events: none;\n' +
+'    }\n' +
+'    .frame-corners::before { top: 12px; left: 12px; border-right: none; border-bottom: none; }\n' +
+'    .frame-corners::after { bottom: 12px; right: 12px; border-left: none; border-top: none; }\n' +
+'    .frame-double {\n' +
+'      outline: 2px dashed currentColor;\n' +
+'      outline-offset: -10px;\n' +
+'    }\n' +
+'    .frame-glass {\n' +
+'      backdrop-filter: blur(12px);\n' +
+'      box-shadow: inset 0 0 25px rgba(255,255,255,0.1), 0 0 30px currentColor;\n' +
+'    }\n' +
+'    .text-title {\n' +
+'      font-size: clamp(2.4rem, 6vw, 3.8rem);\n' +
+'      font-weight: 800;\n' +
+'      letter-spacing: 0.08em;\n' +
+'      text-transform: uppercase;\n' +
+'      text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;\n' +
+'    }\n' +
+'    .text-sub {\n' +
+'      font-size: 0.85rem;\n' +
+'      letter-spacing: 0.25em;\n' +
+'      opacity: 0.75;\n' +
+'      margin-top: 8px;\n' +
+'      text-transform: uppercase;\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <div class="card-container" id="cardContainer">\n' +
+'    <div class="spin-rig">\n' +
+'      <div class="side front frame-' + fStyle + '">\n' +
+'        <div class="text-title">' + fText + '</div>\n' +
+'        <div class="text-sub">SIDE A • PRIMARY</div>\n' +
+'      </div>\n' +
+'      <div class="side back frame-' + fStyle + '">\n' +
+'        <div class="text-title">' + bText + '</div>\n' +
+'        <div class="text-sub">SIDE B • CONTRAST</div>\n' +
+'      </div>\n' +
+'    </div>\n' +
+'  </div>\n' +
+'  <script>\n' +
+'    const container = document.getElementById("cardContainer");\n' +
+'    window.addEventListener("pointermove", (e) => {\n' +
+'      const x = (e.clientX / window.innerWidth - 0.5) * 40;\n' +
+'      const y = (e.clientY / window.innerHeight - 0.5) * -30;\n' +
+'      container.style.transform = "rotateX(" + y + "deg) rotateZ(" + (x * 0.2) + "deg)";\n' +
+'    });\n' +
+'  <\/script>\n' +
+'</body>\n' +
+'</html>';
   }
 };
 
 // --------------------------------------------------------
 // 3. Melty Liquid SVG Text Filter
 // Author: Luke Murphy (@lurkmoophy) (https://codepen.io/editor/lurkmoophy/pen/019facf7-7d5c-7a2d-8e36-f50cf065a874)
+// Fixed: Slider value reactivity & continuous organic dripping melt loop
 // --------------------------------------------------------
 window.EffectRegistry['lurkmoophy-melty-text'] = {
   id: 'lurkmoophy-melty-text',
@@ -328,64 +525,31 @@ window.EffectRegistry['lurkmoophy-melty-text'] = {
   github: 'https://codepen.io/editor/lurkmoophy/pen/019facf7-7d5c-7a2d-8e36-f50cf065a874',
   description: "Vloeiende smeltende en druipende vloeistoftekst via dynamische SVG displacement- en turbulentiefilters.",
   defaultSettings: {
-  "fontFamily": "'Archivo Black', sans-serif",
-  "customText": "IT'S TOO HOT",
-  "meltIntensity": 20,
-  "textColor": "#e84005",
-  "bgColor": "#160a06"
-},
+    fontFamily: "'Archivo Black', sans-serif",
+    customText: "IT'S TOO HOT",
+    meltIntensity: 25,
+    textColor: "#e84005",
+    bgColor: "#160a06"
+  },
   controls: [
-  {
-    "type": "select",
-    "key": "fontFamily",
-    "label": "Lettertype (Font)",
-    "options": [
-      {
-        "value": "'Archivo Black', sans-serif",
-        "label": "Archivo Black (Ultra Heavy)"
-      },
-      {
-        "value": "'Montserrat', sans-serif",
-        "label": "Montserrat (Geometric)"
-      },
-      {
-        "value": "'Cinzel', serif",
-        "label": "Cinzel (Serif)"
-      },
-      {
-        "value": "'Orbitron', sans-serif",
-        "label": "Orbitron (Sci-Fi)"
-      },
-      {
-        "value": "'Great Vibes', cursive",
-        "label": "Great Vibes (Flowing)"
-      }
-    ]
-  },
-  {
-    "type": "text",
-    "key": "customText",
-    "label": "Smelt Tekst"
-  },
-  {
-    "type": "range",
-    "key": "meltIntensity",
-    "label": "Druip / Smeltkracht",
-    "min": 5,
-    "max": 50,
-    "step": 1
-  },
-  {
-    "type": "color",
-    "key": "textColor",
-    "label": "Tekstkleur"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrond"
-  }
-],
+    {
+      type: "select", key: "fontFamily", label: "Lettertype (Font)",
+      options: [
+        { value: "'Archivo Black', sans-serif", label: "Archivo Black (Ultra Heavy)" },
+        { value: "'Montserrat', sans-serif", label: "Montserrat (Geometric)" },
+        { value: "'Orbitron', sans-serif", label: "Orbitron (Sci-Fi)" },
+        { value: "'Cinzel', serif", label: "Cinzel (Serif)" },
+        { value: "'Great Vibes', cursive", label: "Great Vibes (Flowing)" }
+      ]
+    },
+    { type: "text", key: "customText", label: "Smelt Tekst" },
+    {
+      type: "range", key: "meltIntensity", label: "Druip / Smeltkracht",
+      min: 5, max: 60, step: 1
+    },
+    { type: "color", key: "textColor", label: "Tekstkleur" },
+    { type: "color", key: "bgColor", label: "Achtergrond" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -415,108 +579,187 @@ window.EffectRegistry['lurkmoophy-melty-text'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n\n<meta property=\"og:description\" content=\"Made on CodePen by Luke\">\n<meta property=\"og:image\" content=\"https://019facf7-7d5c-7a2d-8e36-f50cf065a874.codepen.dev/.codepen/screenshots/81f2ac54c43be232ffbd40af9ddd30acafeec8c2929df6cffe010dc86350d53b/1280.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<link rel=\"icon\" href=\"https://public.codepenassets.com/favicon/favicon.ico\">\n\n    <meta charset=\"UTF-8\">\n    <style>\n@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');\n\n* { box-sizing: border-box; margin: 0; }\n\nbody {\n  min-height: 100vh;\n  display: grid;\n  place-items: center;\n  background: radial-gradient(ellipse at 50% 120%, #3a1206 0%, #160a06 60%, #0d0605 100%);\n  overflow: hidden;\n}\n\n.melt-wrap {\n  display: grid;\n  font-size: clamp(3rem, 12vw, 9rem);\n  text-align: center;\n  text-transform: uppercase;\n  padding: 3rem 3rem 9rem; /* extra bottom room for drips to run into */\n  cursor: pointer;\n  user-select: none;\n  --line: 0%;    /* how far down the melt front has traveled */\n  --feather: 20%; /* softness of the front / length of drip trail-off */\n}\n\n.melt-squish {\n  display: grid;\n  transform-origin: 50% 100%; /* squish down onto the baseline */\n  will-change: transform;\n}\n\n.melt-text {\n  grid-area: 1 / 1;\n  font-family: 'Archivo Black', 'Arial Black', sans-serif;\n  font-size: 1em;\n  line-height: 1;\n  letter-spacing: -0.1em;\n  color: #e84005;\n}\n\n/* solid, unmelted text — hidden above the melt front, crisp below it */\n.melt-crisp {\n  mask-image: linear-gradient(to bottom,\n    transparent 0%,\n    transparent var(--line),\n    black calc(var(--line) + var(--feather)));\n  -webkit-mask-image: linear-gradient(to bottom,\n    transparent 0%,\n    transparent var(--line),\n    black calc(var(--line) + var(--feather)));\n}\n\n/* liquefied duplicate — visible only from the top down to the melt front,\n   stretched downward so the goo visibly runs past its original footprint */\n.melt-ice {\n  filter: url(#melt) drop-shadow(0 0px 40px rgba(200, 20, 0, 0.1));\n  transform-origin: 50% 0%;\n  will-change: transform;\n  mask-image: linear-gradient(to bottom,\n    rgba(0,0,0,0.9) 0%,\n    rgba(0,0,0,0.9) var(--line),\n    transparent calc(var(--line) + var(--feather)));\n  -webkit-mask-image: linear-gradient(to bottom,\n    rgba(0,0,0,0.9) 0%,\n    rgba(0,0,0,0.9) var(--line),\n    transparent calc(var(--line) + var(--feather)));\n}\n</style>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Melty Text</title>\n  </head>\n  <body>\n    <svg width=\"0\" height=\"0\" aria-hidden=\"true\" focusable=\"false\">\n      <filter id=\"melt\" x=\"-30%\" y=\"-40%\" width=\"160%\" height=\"320%\" color-interpolation-filters=\"sRGB\">\n        <feTurbulence id=\"melt-noise\" type=\"fractalNoise\" baseFrequency=\"0.025 0.006\" numOctaves=\"2\" seed=\"4\" result=\"noise\"/>\n        <!-- damp R (horizontal) so goo droops instead of shredding sideways;\n             boost G contrast and bias it below 0.5 so displacement pulls downward -->\n        <feColorMatrix in=\"noise\" type=\"matrix\"\n          values=\"0.3 0 0 0 0.35\n                  0   3 0 0 -0.6\n                  0   0 1 0 0\n                  0   0 0 0 1\" result=\"drip-noise\"/>\n        <feDisplacementMap id=\"melt-disp\" in=\"SourceGraphic\" in2=\"drip-noise\" scale=\"0\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"displaced\"/>\n        <feGaussianBlur id=\"melt-blur\" in=\"displaced\" stdDeviation=\"0\" result=\"smeared\"/>\n        <!-- gooey pass: re-sharpen the blurred alpha so the smear solidifies into liquid blobs -->\n        <feColorMatrix id=\"melt-goo\" in=\"smeared\" type=\"matrix\"\n          values=\"1 0 0 0 0\n                  0 1 0 1 0\n                  0 0 1 0 0\n                  0 0 0 1 0\"/>\n      </filter>\n    </svg>\n    \n    <main class=\"scene\">\n      <div class=\"melt-wrap\">\n        <div class=\"melt-squish\">\n          <h1 class=\"melt-text melt-crisp\">it's too hot</h1>\n          <h1 class=\"melt-text melt-ice\" aria-hidden=\"true\">it's too hot</h1>\n        </div>\n      </div>\n    </main>\n    <script>\nconst wrap = document.querySelector('.melt-wrap');\nconst ice = document.querySelector('.melt-ice');\nconst disp = document.getElementById('melt-disp');\nconst squish = document.querySelector('.melt-squish');\nconst blur = document.getElementById('melt-blur');\nconst noise = document.getElementById('melt-noise');\nconst goo = document.getElementById('melt-goo');\n\nconst MAX_SCALE = 5;    // displacement strength at full melt\nconst MAX_BLUR = 20;      // smear that the goo pass re-solidifies into drips\nconst ICE_STRETCH = 0; // how far the liquefied layer elongates downward\nconst MELT_TAU = 5;    // seconds — melt front travels down over roughly this long\nconst FREEZE_TAU = 7;    // seconds — slow reverse when you leave\nconst SQUISH_MIN = 0.1; // the amount the text squishes down to\n\nlet target = 0;\nlet melt = 0;\nlet raf = null;\nlet last = null;\n\nwrap.addEventListener('pointerenter', () => { target = 1; start(); });\nwrap.addEventListener('pointerleave', () => { target = 0; start(); });\n\nfunction start() {\n  if (raf === null) { last = null; raf = requestAnimationFrame(tick); }\n}\n\nfunction tick(now) {\n  const dt = last === null ? 1 / 60 : Math.min((now - last) / 1000, 0.1);\n  last = now;\n\n  const tau = target > melt ? MELT_TAU : FREEZE_TAU;\n  melt += (target - melt) * (1 - Math.exp(-dt / tau));\n  if (Math.abs(target - melt) < 0.001) melt = target;\n\n  // the molten surface writhes a little while hot\n  const wobble = Math.sin(now * 0.0012) * 0.01 * melt;\n  noise.setAttribute('baseFrequency', `${(0.025 + wobble).toFixed(4)} 0.006`);\n\n  disp.setAttribute('scale', (MAX_SCALE * melt).toFixed(2));\n  blur.setAttribute('stdDeviation', (MAX_BLUR * melt).toFixed(2));\n\n  // alpha contrast: identity at rest, hard liquid threshold when molten\n  const aMul = 1 + melt * 15;\n  const aOff = -melt * 6;\n  goo.setAttribute('values', `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${aMul.toFixed(2)} ${aOff.toFixed(2)}`);\n\n  // stretch the liquefied duplicate downward so goo visibly runs past the front\n  ice.style.transform = `scaleY(${(1 + ICE_STRETCH * melt).toFixed(4)})`;\n  \n  // the whole word squishes down toward the baseline as it melts\n  squish.style.transform = `scaleY(${(1 - (1 - SQUISH_MIN) * melt).toFixed(4)})`;\n\n  // the melt front travels down through the letterforms\n  wrap.style.setProperty('--line', (melt * 100).toFixed(1) + '%');\n  // drips trail off further behind the front the longer it's been melting\n  wrap.style.setProperty('--feather', (8 + 22 * melt).toFixed(1) + '%');\n\n  // stretch the liquefied duplicate downward so goo visibly runs past the front\n  ice.style.transform = `scaleY(${(1 + ICE_STRETCH * melt).toFixed(4)})`;\n\n  if (melt === 0 && target === 0) { raf = null; return; }\n  raf = requestAnimationFrame(tick);\n}\n</script>\n  </body>\n</html>\n";
+    const textVal = s.customText || "IT'S TOO HOT";
+    const intensity = Number(s.meltIntensity || 25);
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        .melt-text { font-family: ${s.fontFamily || "'Archivo Black', sans-serif"} !important; color: ${s.textColor || '#e84005'} !important; }
-        body { background: ${s.bgColor || '#160a06'} !important; }
-        .melt-wrap { --feather: ${s.meltIntensity || 20}%; }
-      `);
-      if (s.customText) {
-        customScript += `
-          document.querySelectorAll('.melt-text').forEach(el => {
-            el.textContent = ${JSON.stringify(s.customText)};
-          });
-        `;
-      }
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>Melty Liquid Text</title>\n' +
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">\n' +
+'  <style>\n' +
+'    * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'    body {\n' +
+'      min-height: 100vh;\n' +
+'      display: grid;\n' +
+'      place-items: center;\n' +
+'      background: ' + (s.bgColor || '#160a06') + ';\n' +
+'      overflow: hidden;\n' +
+'      user-select: none;\n' +
+'    }\n' +
+'    .melt-wrap {\n' +
+'      display: grid;\n' +
+'      font-size: clamp(2.8rem, 11vw, 8.5rem);\n' +
+'      text-align: center;\n' +
+'      text-transform: uppercase;\n' +
+'      padding: 3rem 2rem 10rem;\n' +
+'      cursor: pointer;\n' +
+'      --line: 50%;\n' +
+'      --feather: ' + intensity + '%;\n' +
+'    }\n' +
+'    .melt-squish {\n' +
+'      display: grid;\n' +
+'      transform-origin: 50% 100%;\n' +
+'      will-change: transform;\n' +
+'    }\n' +
+'    .melt-text {\n' +
+'      grid-area: 1 / 1;\n' +
+'      font-family: ' + (s.fontFamily || "'Archivo Black', sans-serif") + ';\n' +
+'      font-size: 1em;\n' +
+'      line-height: 1;\n' +
+'      letter-spacing: -0.05em;\n' +
+'      color: ' + (s.textColor || '#e84005') + ';\n' +
+'    }\n' +
+'    .melt-crisp {\n' +
+'      mask-image: linear-gradient(to bottom, transparent 0%, transparent var(--line), black calc(var(--line) + var(--feather)));\n' +
+'      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent var(--line), black calc(var(--line) + var(--feather)));\n' +
+'    }\n' +
+'    .melt-ice {\n' +
+'      filter: url(#melt) drop-shadow(0 0 35px ' + (s.textColor || '#e84005') + '66);\n' +
+'      transform-origin: 50% 0%;\n' +
+'      will-change: transform;\n' +
+'      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.95) var(--line), transparent calc(var(--line) + var(--feather)));\n' +
+'      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.95) var(--line), transparent calc(var(--line) + var(--feather)));\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;">\n' +
+'    <filter id="melt" x="-30%" y="-40%" width="160%" height="340%" color-interpolation-filters="sRGB">\n' +
+'      <feTurbulence id="melt-noise" type="fractalNoise" baseFrequency="0.025 0.008" numOctaves="2" seed="4" result="noise"/>\n' +
+'      <feColorMatrix in="noise" type="matrix"\n' +
+'        values="0.3 0 0 0 0.35\n' +
+'                0   3 0 0 -0.6\n' +
+'                0   0 1 0 0\n' +
+'                0   0 0 1 0" result="drip-noise"/>\n' +
+'      <feDisplacementMap id="melt-disp" in="SourceGraphic" in2="drip-noise" scale="' + (intensity * 1.2) + '" xChannelSelector="R" yChannelSelector="G" result="displaced"/>\n' +
+'      <feGaussianBlur id="melt-blur" in="displaced" stdDeviation="' + (intensity * 0.35) + '" result="smeared"/>\n' +
+'      <feColorMatrix id="melt-goo" in="smeared" type="matrix"\n' +
+'        values="1 0 0 0 0\n' +
+'                0 1 0 0 0\n' +
+'                0 0 1 0 0\n' +
+'                0 0 0 18 -7"/>\n' +
+'    </filter>\n' +
+'  </svg>\n' +
+'\n' +
+'  <main class="scene">\n' +
+'    <div class="melt-wrap" id="wrap">\n' +
+'      <div class="melt-squish" id="squish">\n' +
+'        <h1 class="melt-text melt-crisp">' + textVal + '</h1>\n' +
+'        <h1 class="melt-text melt-ice" id="ice" aria-hidden="true">' + textVal + '</h1>\n' +
+'      </div>\n' +
+'    </div>\n' +
+'  </main>\n' +
+'\n' +
+'  <script>\n' +
+'    console.log("[MeltyText] Initialized with intensity:", ' + intensity + ');\n' +
+'    const wrap = document.getElementById("wrap");\n' +
+'    const ice = document.getElementById("ice");\n' +
+'    const squish = document.getElementById("squish");\n' +
+'    const disp = document.getElementById("melt-disp");\n' +
+'    const blur = document.getElementById("melt-blur");\n' +
+'    const noise = document.getElementById("melt-noise");\n' +
+'    const goo = document.getElementById("melt-goo");\n' +
+'\n' +
+'    const INTENSITY = ' + intensity + ';\n' +
+'    const MAX_SCALE = 12 + INTENSITY * 0.9;\n' +
+'    const MAX_BLUR = 3 + INTENSITY * 0.38;\n' +
+'    const ICE_STRETCH = 0.2 + (INTENSITY / 60) * 0.6;\n' +
+'\n' +
+'    let hoverBoost = 0;\n' +
+'    wrap.addEventListener("pointerenter", () => { hoverBoost = 0.4; });\n' +
+'    wrap.addEventListener("pointerleave", () => { hoverBoost = 0.0; });\n' +
+'\n' +
+'    let time = 0;\n' +
+'    function tick() {\n' +
+'      time += 0.016;\n' +
+'      // Organic cyclic breathing melt that is ALWAYS visually active\n' +
+'      const cycle = 0.65 + 0.35 * Math.sin(time * 1.5) + hoverBoost;\n' +
+'      const currentMelt = Math.min(1.2, cycle);\n' +
+'\n' +
+'      // Writhing hot surface ripples\n' +
+'      const wobble = Math.sin(time * 2.2) * 0.008;\n' +
+'      noise.setAttribute("baseFrequency", (0.025 + wobble).toFixed(4) + " 0.008");\n' +
+'\n' +
+'      const scaleVal = (MAX_SCALE * currentMelt).toFixed(1);\n' +
+'      const blurVal = (MAX_BLUR * currentMelt).toFixed(1);\n' +
+'      disp.setAttribute("scale", scaleVal);\n' +
+'      blur.setAttribute("stdDeviation", blurVal);\n' +
+'\n' +
+'      // Elongate dripping liquefied layer\n' +
+'      ice.style.transform = "scaleY(" + (1 + ICE_STRETCH * currentMelt).toFixed(3) + ")";\n' +
+'      squish.style.transform = "scaleY(" + (1 - 0.15 * currentMelt).toFixed(3) + ")";\n' +
+'\n' +
+'      wrap.style.setProperty("--line", (currentMelt * 65).toFixed(1) + "%");\n' +
+'      wrap.style.setProperty("--feather", (INTENSITY + Math.sin(time) * 5).toFixed(1) + "%");\n' +
+'\n' +
+'      requestAnimationFrame(tick);\n' +
+'    }\n' +
+'    requestAnimationFrame(tick);\n' +
+'  <\/script>\n' +
+'</body>\n' +
+'</html>';
   }
 };
 
 // --------------------------------------------------------
 // 4. Colorful Spiky Sphere 3D (Pure CSS)
 // Author: Amit Sheen (@amit_sheen) (https://codepen.io/editor/amit_sheen/pen/019f95cf-c90e-761d-8b37-e0e823a8d611)
+// Enhanced with Editable 3D Holographic Typography Overlay
 // --------------------------------------------------------
 window.EffectRegistry['amit-spiky-sphere'] = {
   id: 'amit-spiky-sphere',
   title: "Colorful Spiky Sphere 3D (Pure CSS)",
   category: 'Css 3D Effect',
-  tech: 'Pure CSS 3D Transforms',
+  tech: 'Pure CSS 3D Transforms & Interactive Typography',
   github: 'https://codepen.io/editor/amit_sheen/pen/019f95cf-c90e-761d-8b37-e0e823a8d611',
-  description: "Geometrische pulserende stekelbol volledig opgebouwd uit pure CSS 3D elementen en keyframe transformaties.",
+  description: "Geometrische pulserende stekelbol volledig opgebouwd uit pure CSS 3D elementen met interactieve 3D typografie overlay.",
   defaultSettings: {
-  "speed": 1,
-  "scale": 1,
-  "spikeColor": "#00ffff",
-  "bgColor": "#000000"
-},
+    customText: "SUPERDUPER FX 3D",
+    fontFamily: "'Orbitron', sans-serif",
+    speed: 1.0,
+    scale: 1.0,
+    spikeColor: "#00ffff",
+    textColor: "#ffffff",
+    bgColor: "#050508"
+  },
   controls: [
-  {
-    "type": "range",
-    "key": "speed",
-    "label": "Rotatiesnelheid",
-    "min": 0.2,
-    "max": 3,
-    "step": 0.1
-  },
-  {
-    "type": "range",
-    "key": "scale",
-    "label": "Grootte Schaal",
-    "min": 0.5,
-    "max": 2,
-    "step": 0.1
-  },
-  {
-    "type": "color",
-    "key": "spikeColor",
-    "label": "Stekel Glow Tint"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrond"
-  }
-],
+    { type: "text", key: "customText", label: "Tekst op Sphere (Klikbaar/Typbaar)" },
+    {
+      type: "select", key: "fontFamily", label: "Lettertype (Font)",
+      options: [
+        { value: "'Orbitron', sans-serif", label: "Orbitron (Futuristic)" },
+        { value: "'Montserrat', sans-serif", label: "Montserrat (Bold)" },
+        { value: "'Fira Code', monospace", label: "Fira Code (Cyber)" },
+        { value: "'Cinzel', serif", label: "Cinzel (Classic)" }
+      ]
+    },
+    { type: "range", key: "speed", label: "Rotatiesnelheid", min: 0.2, max: 3.0, step: 0.1 },
+    { type: "range", key: "scale", label: "Grootte Schaal", min: 0.5, max: 2.0, step: 0.1 },
+    { type: "color", key: "spikeColor", label: "Stekel Glow Tint" },
+    { type: "color", key: "textColor", label: "Tekstkleur" },
+    { type: "color", key: "bgColor", label: "Achtergrond" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -546,55 +789,154 @@ window.EffectRegistry['amit-spiky-sphere'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!DOCTYPE html>\n<html lang=\"en\">\n\n  <head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n\n<meta property=\"og:description\" content=\"Made on CodePen by Amit Sheen\">\n<meta property=\"og:image\" content=\"https://019f95cf-c90e-761d-8b37-e0e823a8d611.codepen.dev/.codepen/screenshots/419f5aeb64c5042cf15afc3bfae151302375e0071811afe845683049f40118eb/1280.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<link rel=\"icon\" href=\"https://public.codepenassets.com/favicon/favicon.ico\">\n\n    <meta charset=\"UTF-8\">\n    <title>Colorful Spiky Sphere (CSS)</title>\n    <style>\n*, *::before, *::after {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nbody {\n    background-color: #111;\n    color: #fff;\n    min-height: 100vh;\n    display: grid;\n    place-items: center;\n    perspective: 600px;\n    overflow: clip;\n    \n    * {\n        transform-style: preserve-3d;\n    }\n}\n\n.scene {\n    position: relative;\n    animation: scene 24s infinite linear;\n    \n    * { position: absolute; }\n}\n\n@keyframes scene {\n    from { transform: rotateX(0deg) rotateZ(0deg);}\n    to { transform: rotateX(360deg) rotateZ(360deg);}\n}\n\n.spike {\n    inset: -3em;\n    animation: spike\n        calc(sin(var(--s) * 137.5deg) * 0.5s + 2s) /* duration variation */\n        calc(sin(var(--s) * 222.5deg) * 6s - 6s) /* 'random' delay */\n        infinite ease-in-out alternate;\n\n    &:has(i:nth-child(6)) {\n        --side-angle-z: 60deg;\n        --side-angle-x: -49deg;\n        --bottom-size: 2.6em;\n    }\n    \n    --color1: hsl(calc(var(--s) * 11.25) 100% 8%);\n    --color2: hsl(calc(var(--s) * 11.25) 100% 4%);\n    --border: #fff;\n\n    i {\n        left: 50%; bottom: 50%;\n        width: 3em; height: 4em;\n        transform-origin: bottom;\n        transform:\n            translateX(-50%)\n            rotateZ(calc(var(--i) * var(--side-angle-z, 72deg)))\n            translateY(var(--bottom-size, 2.1em))\n            rotateX(var(--side-angle-x, -58deg));\n        opacity: 0.9;\n        background-image: \n            linear-gradient(0deg, var(--border) 1px, transparent 0),\n            conic-gradient(from 159deg at 50% 3px, var(--color1), var(--color2) 42deg, transparent 0),\n            conic-gradient(from 159deg at top, var(--border) 42deg, transparent 0);\n    }\n\n    &.a {\n        --transform: translateZ(7.5em) rotateZ(37.5deg);\n    }\n    &.b {\n        --transform: rotate(calc(var(--s) * 72deg)) rotateX(37.5deg) translateZ(7.3em);\n    }\n    &.c {\n        --transform: rotate(calc(var(--s) * 72deg + 36deg)) rotateX(64deg) translateZ(7.5em) rotateZ(180deg);\n    }\n    &.d {\n        --transform: rotate(calc(var(--s) * 72deg)) rotateX(79deg) translateZ(7.3em);\n    }\n    &.e {\n        --transform: rotate(calc(var(--s) * 72deg + 36deg)) rotateX(101deg) translateZ(7.3em);\n    }\n    &.f {\n        --transform: rotate(calc(var(--s) * 72deg)) rotateX(116deg) translateZ(7.5em);\n    }\n    &.g {\n        --transform: rotate(calc(var(--s) * 72deg + 36deg)) rotateX(142.5deg) translateZ(7.3em);\n    }\n    &.h {\n        --transform: rotateX(180deg) translateZ(7.5em) rotateZ(37.5deg);\n    }\n}\n\n@keyframes spike {\n    from { transform: var(--transform, ) scaleZ(0.25);}\n    to {  transform: var(--transform, ) scaleZ(2.5);}\n}\n</style>\n  </head>\n\n  <body>\n    <div class=\"scene\">\n    <div class=\"spike a\" style=\"--s: 0;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike b\" style=\"--s: 1;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike b\" style=\"--s: 2;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike b\" style=\"--s: 3;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike b\" style=\"--s: 4;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike b\" style=\"--s: 5;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike c\" style=\"--s: 6;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike c\" style=\"--s: 7;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike c\" style=\"--s: 8;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike c\" style=\"--s: 9;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike c\" style=\"--s: 10;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike d\" style=\"--s: 11;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike d\" style=\"--s: 12;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike d\" style=\"--s: 13;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike d\" style=\"--s: 14;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike d\" style=\"--s: 15;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike e\" style=\"--s: 16;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike e\" style=\"--s: 17;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike e\" style=\"--s: 18;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike e\" style=\"--s: 19;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike e\" style=\"--s: 20;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike f\" style=\"--s: 21;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike f\" style=\"--s: 22;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike f\" style=\"--s: 23;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike f\" style=\"--s: 24;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike f\" style=\"--s: 25;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n    <div class=\"spike g\" style=\"--s: 26;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike g\" style=\"--s: 27;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike g\" style=\"--s: 28;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike g\" style=\"--s: 29;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike g\" style=\"--s: 30;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n        <i style=\"--i: 5;\"></i>\n    </div>\n    <div class=\"spike h\" style=\"--s: 31;\">\n        <i style=\"--i: 0;\"></i>\n        <i style=\"--i: 1;\"></i>\n        <i style=\"--i: 2;\"></i>\n        <i style=\"--i: 3;\"></i>\n        <i style=\"--i: 4;\"></i>\n    </div>\n\n</div>\n\n    <script src=\"https://assets.codepen.io/1948355/twitterButton-2.1.0.js\"></script>\n  </body>\n\n</html>";
+    const textVal = s.customText || "SUPERDUPER FX 3D";
+    const speedVal = (24 / (s.speed || 1.0)).toFixed(1);
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        body { background-color: ${s.bgColor || '#000000'} !important; }
-        .scene { transform: scale(${s.scale || 1}); --duration: ${3 / (s.speed || 1)}s !important; }
-      `);
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>Colorful Spiky Sphere 3D</title>\n' +
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Fira+Code:wght@700&family=Montserrat:wght@800&family=Orbitron:wght@800;900&display=swap" rel="stylesheet">\n' +
+'  <style>\n' +
+'    * { margin: 0; padding: 0; box-sizing: border-box; }\n' +
+'    body {\n' +
+'      background-color: ' + (s.bgColor || '#050508') + ';\n' +
+'      color: #fff;\n' +
+'      min-height: 100vh;\n' +
+'      display: grid;\n' +
+'      place-items: center;\n' +
+'      perspective: 750px;\n' +
+'      overflow: hidden;\n' +
+'      font-family: ' + (s.fontFamily || "'Orbitron', sans-serif") + ';\n' +
+'    }\n' +
+'    body * { transform-style: preserve-3d; }\n' +
+'    .scene-wrap {\n' +
+'      transform: scale(' + (s.scale || 1.0) + ');\n' +
+'      position: relative;\n' +
+'    }\n' +
+'    .scene {\n' +
+'      position: relative;\n' +
+'      animation: scene ' + speedVal + 's infinite linear;\n' +
+'    }\n' +
+'    .scene * { position: absolute; }\n' +
+'    @keyframes scene {\n' +
+'      from { transform: rotateX(0deg) rotateZ(0deg); }\n' +
+'      to { transform: rotateX(360deg) rotateZ(360deg); }\n' +
+'    }\n' +
+'    .spike {\n' +
+'      inset: -3em;\n' +
+'      animation: spike calc(sin(var(--s) * 137.5deg) * 0.5s + 2s) calc(sin(var(--s) * 222.5deg) * 6s - 6s) infinite ease-in-out alternate;\n' +
+'    }\n' +
+'    .spike:has(i:nth-child(6)) {\n' +
+'      --side-angle-z: 60deg;\n' +
+'      --side-angle-x: -49deg;\n' +
+'      --bottom-size: 2.6em;\n' +
+'    }\n' +
+'    .spike {\n' +
+'      --color1: hsl(calc(var(--s) * 11.25) 100% 12%);\n' +
+'      --color2: hsl(calc(var(--s) * 11.25) 100% 6%);\n' +
+'      --border: ' + (s.spikeColor || '#00ffff') + ';\n' +
+'    }\n' +
+'    .spike i {\n' +
+'      left: 50%; bottom: 50%;\n' +
+'      width: 3em; height: 4em;\n' +
+'      transform-origin: bottom;\n' +
+'      transform: translateX(-50%) rotateZ(calc(var(--i) * var(--side-angle-z, 72deg))) translateY(var(--bottom-size, 2.1em)) rotateX(var(--side-angle-x, -58deg));\n' +
+'      opacity: 0.92;\n' +
+'      background-image: linear-gradient(0deg, var(--border) 1px, transparent 0), conic-gradient(from 159deg at 50% 3px, var(--color1), var(--color2) 42deg, transparent 0), conic-gradient(from 159deg at top, var(--border) 42deg, transparent 0);\n' +
+'    }\n' +
+'    .spike.a { --transform: translateZ(7.5em) rotateZ(37.5deg); }\n' +
+'    .spike.b { --transform: rotate(calc(var(--s) * 72deg)) rotateX(37.5deg) translateZ(7.3em); }\n' +
+'    .spike.c { --transform: rotate(calc(var(--s) * 72deg + 36deg)) rotateX(64deg) translateZ(7.5em) rotateZ(180deg); }\n' +
+'    .spike.d { --transform: rotate(calc(var(--s) * 72deg)) rotateX(79deg) translateZ(7.3em); }\n' +
+'    .spike.e { --transform: rotate(calc(var(--s) * 72deg + 36deg)) rotateX(101deg) translateZ(7.3em); }\n' +
+'    .spike.f { --transform: rotate(calc(var(--s) * 72deg)) rotateX(116deg) translateZ(7.5em); }\n' +
+'    .spike.g { --transform: rotate(calc(var(--s) * 72deg + 36deg)) rotateX(142.5deg) translateZ(7.3em); }\n' +
+'    .spike.h { --transform: rotateX(180deg) translateZ(7.5em) rotateZ(37.5deg); }\n' +
+'    @keyframes spike {\n' +
+'      from { transform: var(--transform) scaleZ(0.25); }\n' +
+'      to { transform: var(--transform) scaleZ(2.5); }\n' +
+'    }\n' +
+'    /* 3D Holographic Typography Overlay */\n' +
+'    .holo-text-ring {\n' +
+'      position: absolute;\n' +
+'      top: 50%; left: 50%;\n' +
+'      transform: translate(-50%, -50%) translateZ(12em);\n' +
+'      background: rgba(10, 15, 30, 0.75);\n' +
+'      backdrop-filter: blur(8px);\n' +
+'      border: 1.5px solid ' + (s.spikeColor || '#00ffff') + ';\n' +
+'      box-shadow: 0 0 25px ' + (s.spikeColor || '#00ffff') + '66;\n' +
+'      padding: 12px 28px;\n' +
+'      border-radius: 999px;\n' +
+'      font-size: 1.15rem;\n' +
+'      font-weight: 800;\n' +
+'      color: ' + (s.textColor || '#ffffff') + ';\n' +
+'      white-space: nowrap;\n' +
+'      letter-spacing: 0.15em;\n' +
+'      text-transform: uppercase;\n' +
+'      cursor: text;\n' +
+'      outline: none;\n' +
+'      z-index: 100;\n' +
+'    }\n' +
+'    .holo-text-ring:focus {\n' +
+'      border-color: #ffffff;\n' +
+'      box-shadow: 0 0 35px #ffffff, 0 0 50px ' + (s.spikeColor || '#00ffff') + ';\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <div class="scene-wrap">\n' +
+'    <div class="scene">\n' +
+'      <div class="spike a" style="--s: 0;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike b" style="--s: 1;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike b" style="--s: 2;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike b" style="--s: 3;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike b" style="--s: 4;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike b" style="--s: 5;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike c" style="--s: 6;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike c" style="--s: 7;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike c" style="--s: 8;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike c" style="--s: 9;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike c" style="--s: 10;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike d" style="--s: 11;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike d" style="--s: 12;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike d" style="--s: 13;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike d" style="--s: 14;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike d" style="--s: 15;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike e" style="--s: 16;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike e" style="--s: 17;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike e" style="--s: 18;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike e" style="--s: 19;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike e" style="--s: 20;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike f" style="--s: 21;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike f" style="--s: 22;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike f" style="--s: 23;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike f" style="--s: 24;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike f" style="--s: 25;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'      <div class="spike g" style="--s: 26;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike g" style="--s: 27;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike g" style="--s: 28;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike g" style="--s: 29;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike g" style="--s: 30;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>\n' +
+'      <div class="spike h" style="--s: 31;"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>\n' +
+'\n' +
+'      <div class="holo-text-ring" contenteditable="true" spellcheck="false" title="Klik om direct tekst te typen">' + textVal + '</div>\n' +
+'    </div>\n' +
+'  </div>\n' +
+'</body>\n' +
+'</html>';
   }
 };
-
 // --------------------------------------------------------
 // 5. Customizable Wave Text Path (SVG Motion)
 // Author: BlackStar1991 (@BlackStar1991) (https://codepen.io/editor/BlackStar1991/pen/019fb71f-d611-798d-92e8-a877f4ebd6ff)
@@ -762,51 +1104,41 @@ ${customScript}
   }
 };
 
+
+
 // --------------------------------------------------------
 // 6. The White Stripes — Audio Visual Canvas Waves
 // Author: ccrch (@ccrch) (https://codepen.io/editor/ccrch/pen/019ff211-11e2-7b76-904c-e2616c688373)
+// Fixed: Canvas rendering initialization & Web Audio Seven Nation Army Synth Riff
 // --------------------------------------------------------
 window.EffectRegistry['ccrch-white-stripes'] = {
   id: 'ccrch-white-stripes',
-  title: "The White Stripes — Audio Visual Canvas Waves",
-  category: 'Physics & Simulation',
-  tech: 'HTML5 Canvas Dynamic Sine Waves',
+  title: "The White Stripes — Audio Visual Waves",
+  category: 'Audio Effect',
+  tech: 'HTML5 Canvas Dynamic Sine Waves & Web Audio Synth',
   github: 'https://codepen.io/editor/ccrch/pen/019ff211-11e2-7b76-904c-e2616c688373',
-  description: "Geanimeerde organische strepen en golflijnen geïnspireerd door rockesthetiek en oscilloscoop-visualisaties.",
+  description: "Geanimeerde organische rockstrepen en oscilloscoop-golven gesynchroniseerd met een Web Audio rock synthesizer riff.",
   defaultSettings: {
-  "waveSpeed": 1,
-  "amplitude": 50,
-  "stripeColor": "#ffffff",
-  "bgColor": "#c01818"
-},
+    soundTrack: "seven-nation-army",
+    waveSpeed: 1.0,
+    amplitude: 50,
+    stripeColor: "#ffffff",
+    bgColor: "#c01818"
+  },
   controls: [
-  {
-    "type": "range",
-    "key": "waveSpeed",
-    "label": "Golf Snelheid",
-    "min": 0.2,
-    "max": 3,
-    "step": 0.1
-  },
-  {
-    "type": "range",
-    "key": "amplitude",
-    "label": "Golfhoogte",
-    "min": 10,
-    "max": 120,
-    "step": 5
-  },
-  {
-    "type": "color",
-    "key": "stripeColor",
-    "label": "Kleur Strepen"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrondkleur"
-  }
-],
+    {
+      type: "select", key: "soundTrack", label: "Soundtrack / Audio Synth",
+      options: [
+        { value: "seven-nation-army", label: "Seven Nation Army (Rock Riff Synth)" },
+        { value: "synth-wave", label: "Oscilloscoop Bass Pulse" },
+        { value: "off", label: "Mute (Geen Geluid)" }
+      ]
+    },
+    { type: "range", key: "waveSpeed", label: "Golf Snelheid", min: 0.2, max: 3.0, step: 0.1 },
+    { type: "range", key: "amplitude", label: "Golfhoogte & Kracht", min: 10, max: 120, step: 5 },
+    { type: "color", key: "stripeColor", label: "Kleur Strepen" },
+    { type: "color", key: "bgColor", label: "Achtergrondkleur" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -819,7 +1151,7 @@ window.EffectRegistry['ccrch-white-stripes'] = {
     this.iframe.style.border = 'none';
     this.iframe.style.display = 'block';
     this.iframe.style.borderRadius = '8px';
-    this.iframe.setAttribute('title', "The White Stripes — Audio Visual Canvas Waves");
+    this.iframe.setAttribute('title', "The White Stripes — Audio Visual Waves");
 
     container.appendChild(this.iframe);
     this.renderIframe();
@@ -836,91 +1168,281 @@ window.EffectRegistry['ccrch-white-stripes'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!-- \n\nMinisite prototype for https://twentyonepilots.is/7-21.\nBased on https://codepen.io/editor/ccrch/pen/019fdc2f-bce2-79e7-bbae-d0e09d7fc1d5 canvas experiment.\n\nSong:\nTwenty One Pilots Cover The White Stripes \"Seven Nation Army\" | Rock Hall 2025 Induction\nhttps://youtu.be/-D_uT0kXlRw\n\nMade with <❤/> at Vettvangur - https://vettvangur.is/\nCcrch </> playground - https://ccrch.com/playground\n \n-->\n\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n\n<meta property=\"og:description\" content=\"Minisite prototype for https://twentyonepilots.is/7-21. Based on https://codepen.io/editor/ccrch/pen/019fdc2f-bce2-79e7-bbae-d0e09d7fc1d5 canvas experiment…\">\n<meta property=\"og:image\" content=\"https://019ff211-11e2-7b76-904c-e2616c688373.codepen.dev/.codepen/screenshots/74388bf49b600d2105b03ecc6407a29c000e7ee0d085101b3564ba1dbf9fa6e8/1280.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<link rel=\"icon\" href=\"https://public.codepenassets.com/favicon/favicon.ico\">\n\n<script type=\"importmap\">\n{\n  \"imports\": {\n    \"gsap\": \"https://esm.sh/gsap@^3.15.0\"\n  }\n}\n</script>\n\n    <meta charset=\"UTF-8\">\n    <style>\n@import url(\"https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap\");\nhtml {\n  --playground-body-color-background: color-mix(in srgb, #212121, black 21%);\n  --playground-body-color-text: #e0e0e0;\n  scrollbar-width: thin;\n  color-scheme: dark light;\n}\n\nbody {\n  margin: 0;\n  overflow: hidden;\n  background: var(--playground-body-color-background);\n  color: var(--playground-body-color-text);\n  font-family: \"DM Sans\", sans-serif;\n}\nbody * {\n  box-sizing: border-box;\n}\n\n.top-7-21 {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  z-index: 1;\n  width: 100%;\n  height: 100vh;\n  background: var(--playground-body-color-background);\n}\n.top-7-21-loader {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: fixed;\n  inset: 0;\n  z-index: 21;\n  padding: 0 79px;\n  background: var(--playground-body-color-background);\n  color: color-mix(in srgb, #fff, transparent 42%);\n  font-size: 9px;\n  font-weight: 500;\n  line-height: 2;\n  text-align: center;\n}\n.top-7-21-loader span {\n  opacity: 0;\n}\n.top-7-21-container {\n  position: relative;\n  z-index: 1;\n  width: 100%;\n  height: 100%;\n}\n.top-7-21-button {\n  position: absolute;\n  inset: 46% auto auto 50%;\n  transform: translate(-50%, -50%);\n  z-index: 3;\n  background: none;\n  width: 12vw;\n  border: none;\n  font-size: 0;\n  cursor: pointer;\n}\n@media (width < 900px) {\n  .top-7-21-button {\n    width: 21vw;\n  }\n}\n@media (width < 600px) {\n  .top-7-21-button {\n    width: 28vw;\n  }\n}\n.top-7-21-button svg path {\n  fill: var(--playground-body-color-background);\n}\n.top-7-21-stripes {\n  display: block;\n  position: absolute;\n  inset: 0;\n  z-index: 2;\n  touch-action: none;\n  pointer-events: none;\n}\n.top-7-21-video {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  inset: 50% auto auto 50%;\n  z-index: 1;\n  transform: translate(-50%, -50%);\n  width: 80vw;\n  max-height: 70vh;\n  aspect-ratio: 16/9;\n  font-size: 0;\n}\n@media (width < 900px) {\n  .top-7-21-video {\n    width: 100%;\n    aspect-ratio: 3/4;\n  }\n}\n.top-7-21-video iframe {\n  width: auto;\n  height: 100%;\n  aspect-ratio: inherit;\n}\n@media (width < 900px) {\n  .top-7-21-video iframe {\n    width: 100%;\n  }\n}\n.top-7-21-hit-zone {\n  position: absolute;\n  inset: 0 0 90px;\n  z-index: 2;\n  cursor: grab;\n  touch-action: none;\n  pointer-events: none;\n}\n.top-7-21-hit-zone-active {\n  cursor: grabbing;\n}\n\nfooter {\n  position: fixed;\n  inset: auto max(21px, 2.1vw) max(21px, 2.1vw) auto;\n  z-index: 3;\n  font-family: \"DM Sans\", sans-serif;\n  font-size: max(10px, 0.7vw);\n  font-weight: 400;\n  line-height: 1;\n}\nfooter a {\n  color: inherit;\n  text-decoration: none;\n}\nfooter a span {\n  color: #ff3d00;\n}\nfooter a:not(:has(span)) {\n  text-decoration: underline;\n  text-decoration-color: #ff3d00;\n  text-decoration-thickness: 1px;\n  text-underline-offset: max(2px, 0.21vw);\n}\n\n</style>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Pen</title>\n  </head>\n  <body>\n\n    <div class=\"top-7-21\">\n      <div class=\"top-7-21-loader\">\n        <span>Meg & Jack you've inspired us all...</span>\n      </div>\n      <div class=\"top-7-21-container\">\n        <button class=\"top-7-21-button\">Play<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\"><path d=\"m380-300 280-180-280-180v360ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z\"></path></svg></button>\n        <canvas class=\"top-7-21-stripes\"></canvas>\n        <div class=\"top-7-21-video\">\n          <div></div>\n        </div>\n        <div class=\"top-7-21-hit-zone\"></div>\n      </div>\n    </div>\n\n\n    <footer>Made with <a href=\"https://ccrch.com/playground\" rel=\"noopener noreferrer\" target=\"_blank\"><<span>❤</span>/></a> at <a href=\"https://vettvangur.is\" rel=\"noopener noreferrer\" target=\"_blank\">Vettvangur</a></footer>\n    <script>\nimport gsap from 'gsap';\nconst Component = {\n    el: {\n        button: document.querySelector('.top-7-21-button'),\n        canvas: document.querySelector('.top-7-21-stripes'),\n        container: document.querySelector('.top-7-21-container'),\n        hitZone: document.querySelector('.top-7-21-hit-zone'),\n        loader: document.querySelector('.top-7-21-loader'),\n        video: document.querySelector('.top-7-21-video'),\n        videoContainer: document.querySelector('.top-7-21-video > div'),\n    },\n    interactive: false,\n    ytPlayer: null,\n    ytPlayerReady: false,\n    init() {\n        // LenisScroll.init()\n        // gsap.registerPlugin(ScrollTrigger)\n        this.handleVideo(() => {\n            this.resizeContainer();\n            this.handleStripes();\n            gsap\n                //\n                .timeline({ defaults: { duration: 1.234 } })\n                .set(this.el.video, { autoAlpha: 0 })\n                .to(this.el.loader, { autoAlpha: 0, duration: 2.1, pointerEvents: 'none' });\n        });\n    },\n    handleStartButton() {\n        gsap.to(this.el.button, { duration: 0.5, opacity: 0, pointerEvents: 'none', scale: 1.5 });\n        this.ytPlayer?.setVolume(100);\n        this.ytPlayer?.playVideo();\n        gsap.set(this.el.hitZone, { pointerEvents: 'auto' });\n        gsap.to(this.el.video, { autoAlpha: 1, duration: 2.1 });\n    },\n    handleStripes() {\n        const { container, canvas, button, hitZone } = Component.el;\n        if (!container || !canvas || !hitZone) {\n            throw new Error('Container, canvas or hit zone not found');\n        }\n        const ctx = canvas.getContext('2d');\n        if (!ctx) {\n            throw new Error('Could not get 2D context');\n        }\n        const stripes = [];\n        const pointer = {\n            x: 0,\n            y: 0,\n            active: false,\n            down: false,\n        };\n        const gravity = 0.521;\n        const damping = 0.985;\n        // const leftOffsetPercent = 12\n        // const rightOffsetPercent = 12\n        const topOffsetPercent = 0; // 4\n        const bottomOffsetPercent = 4;\n        const segmentLengthMin = 10;\n        const segmentLengthMax = 21;\n        const segmentLengthPercent = 2.1;\n        const stripeHeightVariationMinPercent = 85;\n        const stripeHeightVariationMaxPercent = 92;\n        const lineWidthMin = 1;\n        const lineWidthMax = 210; // 3\n        const lineToSpacingRatio = 0.9;\n        const textureDotRadiusRatio = 0.25;\n        const textureSpacingRatio = 1.2;\n        const iterations = 12;\n        let stripesCount = 63; // 21\n        const getSize = () => ({\n            width: container.clientWidth,\n            height: container.clientHeight,\n        });\n        const clamp = (min, value, max) => {\n            return Math.max(min, Math.min(max, value));\n        };\n        const getSegmentLength = (height) => {\n            return clamp(segmentLengthMin, height * (segmentLengthPercent / 100), segmentLengthMax);\n        };\n        const getSpacing = (width) => {\n            return width / (stripesCount + 1);\n        };\n        const getHorizontalBounds = (width) => {\n            if (!this.el.video || !this.el.video.firstElementChild || !this.el.container)\n                return;\n            const videoPercentWidth = (this.el.video.firstElementChild.clientWidth / this.el.container.clientWidth) * 100;\n            const sideOffsetPercent = ((100 - videoPercentWidth) / 2) * 0.9;\n            // const leftOffset = width * (leftOffsetPercent / 100)\n            // const rightOffset = width * (rightOffsetPercent / 100)\n            const leftOffset = width * (sideOffsetPercent / 100);\n            const rightOffset = width * (sideOffsetPercent / 100);\n            return {\n                leftOffset,\n                rightOffset,\n                availableWidth: Math.max(0, width - leftOffset - rightOffset),\n            };\n        };\n        const getLineWidth = (width) => {\n            return clamp(lineWidthMin, getSpacing(width) * lineToSpacingRatio, lineWidthMax);\n        };\n        const setStripesCount = () => {\n            let count = 63;\n            count = window.innerWidth < 1500 ? 50 : count;\n            count = window.innerWidth < 1000 ? 42 : count;\n            count = window.innerWidth < 800 ? 30 : count;\n            count = window.innerWidth < 500 ? 21 : count;\n            return count;\n        };\n        let segmentLength = getSegmentLength(getSize().height);\n        let lineWidth = getLineWidth(getSize().width);\n        const createStripes = () => {\n            stripes.length = 0;\n            stripesCount = setStripesCount();\n            const { width, height } = getSize();\n            const topOffset = height * (topOffsetPercent / 100);\n            const bottomOffset = height * (bottomOffsetPercent / 100);\n            const availableHeight = Math.max(0, height - topOffset - bottomOffset);\n            const { leftOffset, availableWidth } = getHorizontalBounds(width);\n            const spacing = getSpacing(availableWidth);\n            for (let i = 0; i < stripesCount; i++) {\n                const x = leftOffset + spacing * (i + 1);\n                const stripeHeightVariationPercent = stripeHeightVariationMinPercent + Math.random() * (stripeHeightVariationMaxPercent - stripeHeightVariationMinPercent);\n                const stripeHeight = availableHeight * (stripeHeightVariationPercent / 100);\n                const pointsCount = Math.max(2, Math.round(stripeHeight / segmentLength) + 1);\n                const stripe = [];\n                for (let j = 0; j < pointsCount; j++) {\n                    stripe.push({\n                        x,\n                        y: topOffset + j * segmentLength,\n                        oldX: x,\n                        oldY: topOffset + j * segmentLength,\n                        pinned: j === 0,\n                    });\n                }\n                stripes.push(stripe);\n            }\n        };\n        const resize = () => {\n            const { width, height } = getSize();\n            const pixelRatio = window.devicePixelRatio || 1;\n            const { availableWidth } = getHorizontalBounds(width);\n            segmentLength = getSegmentLength(height);\n            lineWidth = getLineWidth(availableWidth);\n            canvas.width = width * pixelRatio;\n            canvas.height = height * pixelRatio;\n            canvas.style.width = `${width}px`;\n            canvas.style.height = `${height}px`;\n            ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);\n            createStripes();\n        };\n        const updatePoint = (point) => {\n            if (point.pinned)\n                return;\n            const vx = (point.x - point.oldX) * damping;\n            const vy = (point.y - point.oldY) * damping;\n            point.oldX = point.x;\n            point.oldY = point.y;\n            point.x += vx;\n            point.y += vy + gravity;\n            if (!pointer.active)\n                return;\n            const dx = point.x - pointer.x;\n            const dy = point.y - pointer.y;\n            const distance = Math.hypot(dx, dy);\n            const isMobile = window.matchMedia('(pointer: coarse)').matches;\n            const mobileMultiplier = isMobile ? 0.5 : 1;\n            const radius = (pointer.down ? 120 : 60) * mobileMultiplier;\n            const strength = (pointer.down ? 15 : 12) * mobileMultiplier;\n            if (distance > 0 && distance < radius) {\n                const force = (1 - distance / radius) * strength;\n                point.x += (dx / distance) * force;\n                point.y += (dy / distance) * force;\n            }\n        };\n        const solveConstraint = (a, b) => {\n            const dx = b.x - a.x;\n            const dy = b.y - a.y;\n            const distance = Math.hypot(dx, dy) || 1;\n            const difference = segmentLength - distance;\n            const percent = difference / distance / 2;\n            const offsetX = dx * percent;\n            const offsetY = dy * percent;\n            if (!a.pinned) {\n                a.x -= offsetX;\n                a.y -= offsetY;\n            }\n            if (!b.pinned) {\n                b.x += offsetX;\n                b.y += offsetY;\n            }\n        };\n        const update = () => {\n            for (const stripe of stripes) {\n                for (const point of stripe) {\n                    updatePoint(point);\n                }\n                for (let i = 0; i < iterations; i++) {\n                    for (let j = 0; j < stripe.length - 1; j++) {\n                        solveConstraint(stripe[j], stripe[j + 1]);\n                    }\n                }\n            }\n        };\n        const drawStripeTexture = (stripe) => {\n            const dotRadius = clamp(1, lineWidth * textureDotRadiusRatio, lineWidth / 2);\n            const dotSpacing = Math.max(dotRadius * 2.5, lineWidth * textureSpacingRatio);\n            const restStripeLength = (stripe.length - 1) * segmentLength;\n            const bottomPadding = dotRadius;\n            ctx.beginPath();\n            for (let distance = 0; distance <= restStripeLength - bottomPadding; distance += dotSpacing) {\n                const segmentIndex = Math.min(Math.floor(distance / segmentLength), stripe.length - 2);\n                const segmentProgress = (distance - segmentIndex * segmentLength) / segmentLength;\n                const a = stripe[segmentIndex];\n                const b = stripe[segmentIndex + 1];\n                const dx = b.x - a.x;\n                const dy = b.y - a.y;\n                const x = a.x + dx * segmentProgress;\n                const y = a.y + dy * segmentProgress;\n                ctx.moveTo(x + dotRadius, y);\n                ctx.arc(x, y, dotRadius, 0, Math.PI * 2);\n            }\n            ctx.fill();\n        };\n        const drawTopStripe = () => {\n            const firstStripe = stripes[0];\n            const lastStripe = stripes[stripes.length - 1];\n            if (!firstStripe || !lastStripe)\n                return;\n            const left = firstStripe[0].x - lineWidth / 2;\n            const right = lastStripe[0].x + lineWidth / 2;\n            ctx.fillRect(left, 0, right - left, lineWidth);\n        };\n        const draw = () => {\n            const { width, height } = getSize();\n            const stripeColor = '#fff'; // getCssVar(null, '--playground-body-color-text') || '#fff'\n            ctx.clearRect(0, 0, width, height);\n            ctx.lineWidth = lineWidth;\n            ctx.strokeStyle = stripeColor;\n            ctx.lineCap = 'square';\n            ctx.fillStyle = stripeColor;\n            for (const stripe of stripes) {\n                ctx.beginPath();\n                for (let i = 0; i < stripe.length; i++) {\n                    const point = stripe[i];\n                    if (i === 0) {\n                        ctx.moveTo(point.x, point.y);\n                    }\n                    else {\n                        ctx.lineTo(point.x, point.y);\n                    }\n                }\n                ctx.stroke();\n                ctx.save();\n                ctx.fillStyle = '#000';\n                ctx.globalCompositeOperation = 'destination-out';\n                drawStripeTexture(stripe);\n                ctx.restore();\n            }\n            ctx.fillStyle = stripeColor;\n            drawTopStripe();\n        };\n        const tick = () => {\n            update();\n            draw();\n            requestAnimationFrame(tick);\n        };\n        const setPointerFromClientPosition = (clientX, clientY) => {\n            const rect = canvas.getBoundingClientRect();\n            pointer.x = clientX - rect.left;\n            pointer.y = clientY - rect.top;\n            pointer.active = true;\n        };\n        hitZone.addEventListener('pointermove', (event) => {\n            if (!this.interactive)\n                return;\n            setPointerFromClientPosition(event.clientX, event.clientY);\n        });\n        hitZone.addEventListener('pointerdown', (event) => {\n            if (!this.interactive)\n                return;\n            setPointerFromClientPosition(event.clientX, event.clientY);\n            pointer.down = true;\n            hitZone.setPointerCapture(event.pointerId);\n            hitZone.classList.add('top-7-21-hit-zone-active');\n        });\n        hitZone.addEventListener('pointerup', (event) => {\n            if (!this.interactive)\n                return;\n            pointer.down = false;\n            hitZone.releasePointerCapture(event.pointerId);\n            hitZone.classList.remove('top-7-21-hit-zone-active');\n        });\n        hitZone.addEventListener('pointercancel', () => {\n            if (!this.interactive)\n                return;\n            pointer.down = false;\n            pointer.active = false;\n        });\n        hitZone.addEventListener('pointerleave', () => {\n            if (!this.interactive)\n                return;\n            if (pointer.down)\n                return;\n            pointer.active = false;\n        });\n        const resizeObserver = new ResizeObserver(() => {\n            resize();\n        });\n        resizeObserver.observe(container);\n        resize();\n        tick();\n        button?.addEventListener('pointerdown', (event) => {\n            setPointerFromClientPosition(event.clientX, event.clientY);\n            pointer.down = true;\n            this.interactive = true;\n            window.setTimeout(() => {\n                pointer.down = false;\n            }, 123);\n            window.setTimeout(() => {\n                pointer.active = false;\n            }, 234);\n            this.handleStartButton();\n        });\n    },\n    handleVideo(callback) {\n        const tag = document.createElement('script');\n        tag.src = 'https://www.youtube.com/iframe_api';\n        const firstScriptTag = document.getElementsByTagName('script')[0];\n        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);\n        window.onYouTubeIframeAPIReady = () => {\n            this.ytPlayer = new YT.Player(this.el.videoContainer, {\n                height: '100%',\n                width: '100%',\n                videoId: '-D_uT0kXlRw',\n                playerVars: {\n                    start: 0,\n                    autoplay: 0,\n                    controls: 1,\n                    fs: 0,\n                    iv_load_policy: 3,\n                    loop: 1,\n                    modestbranding: 1,\n                    mute: 0,\n                    playsinline: 1,\n                    rel: 0,\n                },\n                events: {\n                    onReady: () => {\n                        if (!this.ytPlayerReady) {\n                            this.ytPlayerReady = true;\n                            callback();\n                        }\n                    },\n                },\n            });\n        };\n    },\n    resizeContainer() {\n        // Need this to reliably get the video height after it has loaded and is playing\n        // and align it well with canvas stripes that go 100vw with side paddings\n        const resize = () => {\n            // const w = this.el.video.clientWidth\n            const h = this.el.video?.clientHeight;\n            gsap.set(this.el.container, { height: h });\n        };\n        resize();\n        window.addEventListener('resize', resize);\n    },\n};\nComponent.init();\n\n</script>\n  </body>\n</html>\n";
+    const trackVal = s.soundTrack || "seven-nation-army";
+    const speedVal = s.waveSpeed || 1.0;
+    const ampVal = s.amplitude || 50;
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        body { background: ${s.bgColor || '#c01818'} !important; }
-        canvas { filter: drop-shadow(0 0 20px ${s.stripeColor || '#ffffff'}44); }
-      `);
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>The White Stripes — Audio Visual Canvas Waves</title>\n' +
+'  <style>\n' +
+'    * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'    html, body {\n' +
+'      width: 100%; height: 100%;\n' +
+'      overflow: hidden;\n' +
+'      background: ' + (s.bgColor || '#c01818') + ';\n' +
+'      font-family: system-ui, sans-serif;\n' +
+'    }\n' +
+'    #canvas-wrap {\n' +
+'      position: absolute;\n' +
+'      inset: 0;\n' +
+'      width: 100%; height: 100%;\n' +
+'      display: flex;\n' +
+'      align-items: center;\n' +
+'      justify-content: center;\n' +
+'    }\n' +
+'    canvas {\n' +
+'      display: block;\n' +
+'      width: 100%; height: 100%;\n' +
+'      cursor: grab;\n' +
+'    }\n' +
+'    canvas:active { cursor: grabbing; }\n' +
+'    /* Audio HUD Overlay */\n' +
+'    #sound-badge {\n' +
+'      position: fixed;\n' +
+'      bottom: 24px;\n' +
+'      left: 50%;\n' +
+'      transform: translateX(-50%);\n' +
+'      background: rgba(15, 15, 20, 0.85);\n' +
+'      backdrop-filter: blur(8px);\n' +
+'      border: 1.5px solid rgba(255, 255, 255, 0.35);\n' +
+'      color: #ffffff;\n' +
+'      padding: 10px 22px;\n' +
+'      border-radius: 999px;\n' +
+'      font-size: 0.88rem;\n' +
+'      font-weight: 700;\n' +
+'      display: flex;\n' +
+'      align-items: center;\n' +
+'      gap: 10px;\n' +
+'      cursor: pointer;\n' +
+'      box-shadow: 0 10px 30px rgba(0,0,0,0.4);\n' +
+'      transition: all 0.2s ease;\n' +
+'      z-index: 10;\n' +
+'    }\n' +
+'    #sound-badge:hover {\n' +
+'      background: rgba(30, 30, 40, 0.95);\n' +
+'      border-color: #ffffff;\n' +
+'      transform: translateX(-50%) scale(1.05);\n' +
+'    }\n' +
+'    .pulse-dot {\n' +
+'      width: 10px; height: 10px;\n' +
+'      border-radius: 50%;\n' +
+'      background: #ef4444;\n' +
+'    }\n' +
+'    .pulse-dot.active {\n' +
+'      background: #10b981;\n' +
+'      box-shadow: 0 0 10px #10b981;\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <div id="canvas-wrap">\n' +
+'    <canvas id="stripesCanvas"></canvas>\n' +
+'  </div>\n' +
+'  <div id="sound-badge">\n' +
+'    <span class="pulse-dot" id="dot"></span>\n' +
+'    <span id="badge-label">🎸 Klik voor Rock Synth Sound (Seven Nation Army)</span>\n' +
+'  </div>\n' +
+'\n' +
+'  <script>\n' +
+'    console.log("[WhiteStripes] Canvas and Audio initialized");\n' +
+'    const canvas = document.getElementById("stripesCanvas");\n' +
+'    const ctx = canvas.getContext("2d");\n' +
+'    const badge = document.getElementById("sound-badge");\n' +
+'    const dot = document.getElementById("dot");\n' +
+'    const label = document.getElementById("badge-label");\n' +
+'\n' +
+'    let width = canvas.width = window.innerWidth;\n' +
+'    let height = canvas.height = window.innerHeight;\n' +
+'    window.addEventListener("resize", () => {\n' +
+'      width = canvas.width = window.innerWidth;\n' +
+'      height = canvas.height = window.innerHeight;\n' +
+'      initStripes();\n' +
+'    });\n' +
+'\n' +
+'    // Web Audio Synthesizer\n' +
+'    let audioCtx = null;\n' +
+'    let isAudioPlaying = false;\n' +
+'    let audioGain = 0;\n' +
+'    let synthTimer = null;\n' +
+'\n' +
+'    // Notes for Seven Nation Army riff: E2, E2, G2, E2, D2, C2, B1\n' +
+'    const riffNotes = [\n' +
+'      { freq: 82.41, dur: 0.5 },\n' +
+'      { freq: 82.41, dur: 0.25 },\n' +
+'      { freq: 98.00, dur: 0.35 },\n' +
+'      { freq: 82.41, dur: 0.35 },\n' +
+'      { freq: 73.42, dur: 0.35 },\n' +
+'      { freq: 65.41, dur: 0.7 },\n' +
+'      { freq: 61.74, dur: 0.7 }\n' +
+'    ];\n' +
+'    let noteIdx = 0;\n' +
+'\n' +
+'    function playSynthNote(freq, dur) {\n' +
+'      if (!audioCtx) return;\n' +
+'      try {\n' +
+'        const osc = audioCtx.createOscillator();\n' +
+'        const gain = audioCtx.createGain();\n' +
+'        const filter = audioCtx.createBiquadFilter();\n' +
+'\n' +
+'        osc.type = "sawtooth";\n' +
+'        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);\n' +
+'\n' +
+'        filter.type = "lowpass";\n' +
+'        filter.frequency.setValueAtTime(freq * 4, audioCtx.currentTime);\n' +
+'        filter.Q.value = 4.0;\n' +
+'\n' +
+'        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);\n' +
+'        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);\n' +
+'\n' +
+'        osc.connect(filter);\n' +
+'        filter.connect(gain);\n' +
+'        gain.connect(audioCtx.destination);\n' +
+'\n' +
+'        osc.start();\n' +
+'        osc.stop(audioCtx.currentTime + dur);\n' +
+'        audioGain = 1.0;\n' +
+'      } catch(e) {}\n' +
+'    }\n' +
+'\n' +
+'    function scheduleNextRiffNote() {\n' +
+'      if (!isAudioPlaying) return;\n' +
+'      const cur = riffNotes[noteIdx];\n' +
+'      playSynthNote(cur.freq, cur.dur);\n' +
+'      noteIdx = (noteIdx + 1) % riffNotes.length;\n' +
+'      synthTimer = setTimeout(scheduleNextRiffNote, cur.dur * 1000 + 40);\n' +
+'    }\n' +
+'\n' +
+'    function toggleAudio() {\n' +
+'      if ("' + trackVal + '" === "off") return;\n' +
+'      if (!audioCtx) {\n' +
+'        audioCtx = new (window.AudioContext || window.webkitAudioContext)();\n' +
+'      }\n' +
+'      if (audioCtx.state === "suspended") {\n' +
+'        audioCtx.resume();\n' +
+'      }\n' +
+'      isAudioPlaying = !isAudioPlaying;\n' +
+'      if (isAudioPlaying) {\n' +
+'        dot.classList.add("active");\n' +
+'        label.textContent = "🔊 Seven Nation Army Riff Speelt (Klik om te pauzeren)";\n' +
+'        scheduleNextRiffNote();\n' +
+'      } else {\n' +
+'        dot.classList.remove("active");\n' +
+'        label.textContent = "🎸 Klik voor Rock Synth Sound (Seven Nation Army)";\n' +
+'        clearTimeout(synthTimer);\n' +
+'      }\n' +
+'    }\n' +
+'    badge.addEventListener("click", toggleAudio);\n' +
+'\n' +
+'    // Dynamic Stripes & Rope Simulation\n' +
+'    const stripes = [];\n' +
+'    const stripeCount = 42;\n' +
+'    const mouse = { x: width / 2, y: height / 2, down: false };\n' +
+'\n' +
+'    function initStripes() {\n' +
+'      stripes.length = 0;\n' +
+'      const spacing = width / (stripeCount + 1);\n' +
+'      for (let i = 0; i < stripeCount; i++) {\n' +
+'        const x = spacing * (i + 1);\n' +
+'        const points = [];\n' +
+'        const pointCount = 18;\n' +
+'        for (let j = 0; j < pointCount; j++) {\n' +
+'          const y = (height / (pointCount - 1)) * j;\n' +
+'          points.push({ x, y, ox: x, oy: y, vx: 0, vy: 0, pinned: j === 0 || j === pointCount - 1 });\n' +
+'        }\n' +
+'        stripes.push(points);\n' +
+'      }\n' +
+'    }\n' +
+'    initStripes();\n' +
+'\n' +
+'    window.addEventListener("pointermove", (e) => {\n' +
+'      mouse.x = e.clientX;\n' +
+'      mouse.y = e.clientY;\n' +
+'    });\n' +
+'    window.addEventListener("pointerdown", () => { mouse.down = true; });\n' +
+'    window.addEventListener("pointerup", () => { mouse.down = false; });\n' +
+'\n' +
+'    let time = 0;\n' +
+'    function animate() {\n' +
+'      time += 0.02 * ' + speedVal + ';\n' +
+'      audioGain *= 0.92;\n' +
+'\n' +
+'      ctx.fillStyle = "' + (s.bgColor || '#c01818') + '";\n' +
+'      ctx.fillRect(0, 0, width, height);\n' +
+'\n' +
+'      ctx.lineWidth = Math.max(3, width / (stripeCount * 2.2));\n' +
+'      ctx.strokeStyle = "' + (s.stripeColor || '#ffffff') + '";\n' +
+'      ctx.lineCap = "round";\n' +
+'\n' +
+'      const soundBump = audioGain * ' + ampVal + ' * 0.8;\n' +
+'\n' +
+'      for (let sIdx = 0; sIdx < stripes.length; sIdx++) {\n' +
+'        const pts = stripes[sIdx];\n' +
+'        ctx.beginPath();\n' +
+'        for (let i = 0; i < pts.length; i++) {\n' +
+'          const p = pts[i];\n' +
+'          if (!p.pinned) {\n' +
+'            const dx = p.x - mouse.x;\n' +
+'            const dy = p.y - mouse.y;\n' +
+'            const dist = Math.hypot(dx, dy);\n' +
+'            if (dist < 120) {\n' +
+'              const f = (1 - dist / 120) * (mouse.down ? 25 : 12);\n' +
+'              p.vx += (dx / dist) * f;\n' +
+'            }\n' +
+'            // Standing rock sine wave + sound bump\n' +
+'            const waveOsc = Math.sin(time * 3 + sIdx * 0.4 + i * 0.5) * (15 + soundBump);\n' +
+'            p.vx += (p.ox + waveOsc - p.x) * 0.08;\n' +
+'            p.vx *= 0.88;\n' +
+'            p.x += p.vx;\n' +
+'          }\n' +
+'          if (i === 0) ctx.moveTo(p.x, p.y);\n' +
+'          else ctx.lineTo(p.x, p.y);\n' +
+'        }\n' +
+'        ctx.stroke();\n' +
+'      }\n' +
+'\n' +
+'      requestAnimationFrame(animate);\n' +
+'    }\n' +
+'    animate();\n' +
+'  <\/script>\n' +
+'</body>\n' +
+'</html>';
   }
 };
 
 // --------------------------------------------------------
 // 7. Double-Bend 3D Card Shuffle to Grid
 // Author: Holland Blumer (@hollandblumer) (https://codepen.io/editor/hollandblumer/pen/019fcdd1-9881-74fa-8d86-f9ad57b5d26c)
+// Enhanced with Interactive 3D Parallax Tilt & Scrolling Marquee Ribbon
 // --------------------------------------------------------
 window.EffectRegistry['hollandblumer-shuffle-grid'] = {
   id: 'hollandblumer-shuffle-grid',
   title: "Double-Bend 3D Card Shuffle to Grid",
   category: 'Css 3D Effect',
-  tech: 'CSS 3D Transforms & GSAP',
+  tech: 'Three.js 3D Mesh Deformation & Parallax',
   github: 'https://codepen.io/editor/hollandblumer/pen/019fcdd1-9881-74fa-8d86-f9ad57b5d26c',
-  description: "Interactieve driedimensionale waaier en brug van kaarten die soepel transformeren tussen shuffle-modus en rasterweergave.",
+  description: "Driedimensionale waaier en brug van kaarten die transformeren tussen shuffle en raster, met 3D muisinteractie en zwevende ticker-tekst.",
   defaultSettings: {
-  "speed": 1,
-  "accentColor": "#6366f1",
-  "bgColor": "#0c0d14"
-},
+    marqueeText: "★ SPACEFX 3D CARD SHUFFLE • INTERACTIVE GRID SYSTEM ★",
+    speed: 1.0,
+    accentColor: "#6366f1",
+    bgColor: "#0c0d14"
+  },
   controls: [
-  {
-    "type": "range",
-    "key": "speed",
-    "label": "Overgang Snelheid",
-    "min": 0.5,
-    "max": 2.5,
-    "step": 0.1
-  },
-  {
-    "type": "color",
-    "key": "accentColor",
-    "label": "Accent Highlight"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrondkleur"
-  }
-],
+    { type: "text", key: "marqueeText", label: "Scrollende Ticker Tekst" },
+    { type: "range", key: "speed", label: "Animatie Snelheid", min: 0.5, max: 2.5, step: 0.1 },
+    { type: "color", key: "accentColor", label: "Accent Gloed Tint" },
+    { type: "color", key: "bgColor", label: "Achtergrondkleur" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -950,97 +1472,204 @@ window.EffectRegistry['hollandblumer-shuffle-grid'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!doctype html>\n<html lang=\"en\">\n<head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n\n<meta property=\"og:description\" content=\"Made on CodePen by Holland Blumer\">\n<meta property=\"og:image\" content=\"https://019fcdd1-9881-74fa-8d86-f9ad57b5d26c.codepen.dev/.codepen/screenshots/54f78aee089ea29019d1b1455be7d3519b1d387e455fe5e46471f79f1851cc8a/1280.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<link rel=\"icon\" href=\"https://public.codepenassets.com/favicon/favicon.ico\">\n\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n  <title>Double-Bend Photo Bridge Shuffle — Final Grid</title>\n  <style>\n    *{box-sizing:border-box}\n    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#E7E7E7}\n    canvas{display:block;width:100%;height:100%}\n  </style>\n</head>\n<body>\n  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js\"></script>\n  <script>\n    const EMBEDDED=new URLSearchParams(location.search).has('embedded');\n    if(EMBEDDED){\n      document.documentElement.style.background='transparent';\n      document.body.style.background='transparent';\n    }\n\n    const scene=new THREE.Scene();\n    scene.background=EMBEDDED?null:new THREE.Color(0xe7e7e7);\n    scene.fog=new THREE.FogExp2(0xe7e7e7,.022);\n\n    const VIEW_H=9.2;\n    const viewAspect=innerWidth/innerHeight;\n    const camera=new THREE.OrthographicCamera(\n      -VIEW_H*viewAspect/2,VIEW_H*viewAspect/2,\n      VIEW_H/2,-VIEW_H/2,.1,100\n    );\n    camera.position.set(0,-.8,20);\n    camera.lookAt(0,-.8,0);\n\n    const renderer=new THREE.WebGLRenderer({antialias:true,alpha:EMBEDDED});\n    renderer.setClearColor(0xe7e7e7,EMBEDDED?0:1);\n    renderer.setPixelRatio(Math.min(devicePixelRatio,2));\n    renderer.setSize(innerWidth,innerHeight);\n    renderer.outputEncoding=THREE.sRGBEncoding;\n    document.body.prepend(renderer.domElement);\n\n    const world=new THREE.Group();\n    world.rotation.x=.08;\n    world.rotation.y=0;\n    scene.add(world);\n\n    const HPI=Math.PI/2;\n    const CARD_W=4.9;\n    const CARD_H=3.45;\n    const CARD_COUNT=22;\n    const HALF=Math.ceil(CARD_COUNT/2);\n    const MID=(CARD_COUNT-1)/2;\n\n    const TABLE_Y=-2.10;\n    const GRID_Y=-.80;\n\n    const SHELL=.026;\n    const PACKET_SHELL=.048;\n    const PILE_X=2.62;\n    const MERGE_DUR=1.75;\n\n    const R_INNER=1.42;\n    const PHI_FULL=CARD_W/R_INNER;\n    const HAND_RISE=.45;\n\n    const cards=[];\n    let order=[];\n    let state='stack';\n    let stateTime=0;\n    let elapsed=0;\n    let busy=false;\n    let autoTimer=0;\n    let mouseX=0,mouseY=0;\n\n    const loader=new THREE.TextureLoader();\n    loader.setCrossOrigin('anonymous');\n\n    function smooth(t){return t*t*(3-2*t)}\n    function clamp01(t){return Math.max(0,Math.min(1,t))}\n    function mix(a,b,t){return a+(b-a)*t}\n    function seg(t,a,b){return smooth(clamp01((t-a)/(b-a)))}\n    function jx(){return 0}\n    function jz(){return 0}\n    function jr(){return 0}\n\n    function buildGeometry(){\n      const geometry=new THREE.PlaneBufferGeometry(CARD_W,CARD_H,48,18);\n      geometry.setAttribute('basePosition',geometry.attributes.position.clone());\n      return geometry;\n    }\n\n    function makeCard(i){\n      const texture=loader.load(`https://picsum.photos/seed/three-bridge-${i+70}/700/500`);\n      texture.minFilter=THREE.LinearFilter;\n      texture.magFilter=THREE.LinearFilter;\n\n      const material=new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide});\n      const mesh=new THREE.Mesh(buildGeometry(),material);\n\n      const edgeMaterial=new THREE.MeshBasicMaterial({color:0x484d56,side:THREE.DoubleSide});\n      const edge=new THREE.Mesh(buildGeometry(),edgeMaterial);\n      edge.scale.set(1,1,1);\n      edge.position.z=-.012;\n      edge.visible=false;\n      mesh.add(edge);\n\n      mesh.userData={index:i,edge,bend:0,targetBend:0,packet:null};\n      world.add(mesh);\n      cards.push(mesh);\n      order.push(i);\n    }\n\n    function bendOneGeometry(geometry,bend,camber=1){\n      const position=geometry.attributes.position;\n      const base=geometry.attributes.basePosition;\n      const direction=bend<0?-1:1;\n      const angle=Math.max(.0001,Math.abs(bend));\n      const radius=CARD_W/angle;\n      const widthComp=bend<0 ? angle/(2*Math.sin(angle/2)) : 1;\n\n      for(let i=0;i<position.count;i++){\n        const bx=base.getX(i);\n        const by=base.getY(i);\n        const nx=bx/CARD_W;\n        const theta=nx*angle;\n        const x=radius*Math.sin(theta)*widthComp;\n        const arch=radius*(Math.cos(theta)-1)*direction;\n        position.setXYZ(i,x,by,arch*camber);\n      }\n      position.needsUpdate=true;\n      geometry.computeVertexNormals();\n    }\n\n    function deformCard(card,bend){\n      bendOneGeometry(card.geometry,bend,1);\n      bendOneGeometry(card.userData.edge.geometry,bend,1.015);\n    }\n\n    function stackT(slot){\n      return {x:jx(slot),y:TABLE_Y+slot*SHELL,z:jz(slot),ry:0,rz:jr(slot),bend:0};\n    }\n    function pileT(side,local){\n      return {x:side*PILE_X,y:TABLE_Y+local*PACKET_SHELL,z:0,ry:0,rz:side*.05,bend:.06};\n    }\n    function firstPositionT(side,local){\n      const p=pileT(side,local);\n      return {...p,y:p.y+.30,rx:-HPI,scale:1,bend:-1.18};\n    }\n    function preBendT(side,local){\n      return {\n        x:side*PILE_X,\n        y:TABLE_Y+.30+local*PACKET_SHELL,\n        z:0,\n        ry:0,\n        rz:side*.035,\n        bend:-1.18\n      };\n    }\n    function gridT(slot){\n      const cols=6;\n      const rows=Math.ceil(CARD_COUNT/cols);\n      const row=Math.floor(slot/cols);\n      const rowStart=row*cols;\n      const rowCount=Math.min(cols,CARD_COUNT-rowStart);\n      const col=slot-rowStart;\n      const gapX=1.72;\n      const gapY=1.28;\n      return {\n        x:(col-(rowCount-1)/2)*gapX,\n        y:GRID_Y+(rows-1)*gapY*.5-row*gapY,\n        z:slot*.008,\n        rx:0,ry:0,rz:0,\n        scale:.33,\n        bend:0\n      };\n    }\n\n    function bridgeT(slot){\n      const rc=R_INNER+slot*SHELL;\n      return {\n        x:0,\n        y:TABLE_Y+HAND_RISE+rc-R_INNER*Math.cos(PHI_FULL/2),\n      z:(slot-MID)*.022,\n        ry:0,rz:0,\n        bend:CARD_W/rc\n      };\n    }\n\n    function mergePose(card,slot){\n      const p=card.userData.packet;\n      const T=clamp01(stateTime/MERGE_DUR);\n      const tB=1-Math.pow(1-clamp01(T),2.15);\n      const w=1-Math.pow(1-clamp01(T/.22),2);\n\n      const flatX=p.side*(CARD_W/2-.22);\n      const flatY=TABLE_Y+slot*PACKET_SHELL;\n\n      const buckleT=.14+.86*tB;\n      const ov=CARD_W*buckleT;\n      const S=2*CARD_W-ov;\n      const phi=PHI_FULL*buckleT;\n      const R=S/phi;\n      const rc=R+slot*SHELL;\n      const phiMid=p.side*(phi/2-CARD_W/(2*R));\n      const handY=TABLE_Y+HAND_RISE*tB;\n      const arcX=rc*Math.sin(phiMid);\n      const arcY=handY+rc*Math.cos(phiMid)-R*Math.cos(phi/2);\n\n      const reverseBend=.05;\n      const tg={\n        x:mix(flatX,arcX,w),\n        y:mix(flatY,arcY,w),\n        z:(slot-MID)*.022,\n        ry:mix(0,phiMid,w),\n        rz:p.side*.05*(1-smooth(T)),\n        bend:mix(reverseBend,CARD_W/rc,w)\n      };\n      applyTarget(card,tg,.35);\n      card.userData.bend=tg.bend;\n      card.userData.targetBend=tg.bend;\n    }\n\n    function rifflePose(card,slot){\n      const p=card.userData.packet;\n      const delay=p.local*.052+(p.side>0?.026:0);\n      const local=clamp01((stateTime-delay)/.48);\n      const fall=local*local;\n      const A=preBendT(p.side,p.local);\n      const B={\n        x:p.side*(CARD_W/2-.22),\n        y:TABLE_Y+slot*PACKET_SHELL,\n        z:(slot-MID)*.022,\n        rx:-HPI,ry:0,rz:p.side*.025,\n        scale:1,bend:.05\n      };\n      const flutter=Math.sin(local*Math.PI);\n      const tg={\n        x:mix(A.x,B.x,smooth(local)),\n        y:mix(A.y,B.y,fall)+flutter*.10,\n        z:mix(A.z,B.z,smooth(local)),\n        rx:-HPI,\n        ry:p.side*flutter*.055,\n        rz:mix(A.rz,B.rz,smooth(local)),\n        scale:1,\n        bend:mix(A.bend,B.bend,smooth(local))\n      };\n      applyTarget(card,tg,.38);\n      card.userData.bend=mix(card.userData.bend,tg.bend,.3);\n      card.userData.targetBend=tg.bend;\n    }\n\n    function cascadePose(card,slot){\n      const side=card.userData.packet.side;\n      const delay=slot*.034;\n      const local=smooth(clamp01((stateTime-delay)/.525));\n      const A=bridgeT(slot);\n      const B=stackT(slot);\n      const flick=Math.sin(local*Math.PI);\n      const tg={\n        x:mix(A.x,B.x,local)+side*flick*.25,\n        y:mix(A.y,B.y,local),\n        z:mix(A.z,B.z,local),\n        rx:-HPI,\n        ry:side*flick*.12,\n        rz:mix(A.rz,B.rz,local),\n        scale:1,\n        bend:0\n      };\n      applyTarget(card,tg,.25);\n      card.userData.bend=A.bend*(1-local);\n      card.userData.targetBend=card.userData.bend;\n    }\n\n    function gridMovePose(card,slot){\n      const delay=slot*.105;\n      const local=smooth(clamp01((stateTime-delay)/.54));\n      const A=stackT(slot);\n      const B=gridT(slot);\n      const lift=Math.sin(local*Math.PI)*.38;\n      const tg={\n        x:mix(A.x,B.x,local),\n        y:mix(A.y,B.y,local)+lift,\n        z:mix(A.z,B.z,local),\n        rx:mix(-HPI,0,local),\n        ry:0,\n        rz:mix(A.rz,0,local),\n        scale:mix(1,B.scale,local),\n        bend:0\n      };\n      applyTarget(card,tg,.28);\n    }\n\n    function splitPose(card){\n      const p=card.userData.packet;\n      const A=card.userData.splitStart;\n      const B=firstPositionT(p.side,p.local);\n      const local=smooth(clamp01(stateTime/.56));\n      const tg={\n        x:mix(A.x,B.x,local),\n        y:mix(A.y,B.y,local),\n        z:mix(A.z,B.z,local),\n        rx:mix(A.rx,-HPI,local),\n        ry:mix(A.ry,0,local),\n        rz:mix(A.rz,B.rz,local),\n        scale:mix(A.scale,1,local),\n        bend:mix(A.bend,B.bend,local)\n      };\n      applyTarget(card,tg,.46);\n    }\n\n    function applyTarget(card,tg,k){\n      card.position.x=mix(card.position.x,tg.x,k);\n      card.position.y=mix(card.position.y,tg.y,k);\n      card.position.z=mix(card.position.z,tg.z,k);\n      card.rotation.x=mix(card.rotation.x,tg.rx===undefined?-HPI:tg.rx,k);\n      card.rotation.y=mix(card.rotation.y,tg.ry||0,k);\n      card.rotation.z=mix(card.rotation.z,tg.rz,k);\n      const targetScale=tg.scale===undefined?1:tg.scale;\n      card.scale.x=mix(card.scale.x,targetScale,k);\n      card.scale.y=mix(card.scale.y,targetScale,k);\n      card.scale.z=mix(card.scale.z,targetScale,k);\n      card.userData.targetBend=tg.bend;\n    }\n\n    function assignPackets(){\n      const left=order.slice(0,HALF);\n      const right=order.slice(HALF);\n      left.forEach((id,l)=>cards[id].userData.packet={side:-1,local:l});\n      right.forEach((id,r)=>cards[id].userData.packet={side:1,local:r});\n    }\n\n    function buildInterleave(){\n      const left=[],right=[];\n      cards.forEach(c=>{\n        const p=c.userData.packet;\n        (p.side<0?left:right)[p.local]=c.userData.index;\n      });\n      const next=[];\n      while(left.length||right.length){\n        if(left.length)next.push(left.shift());\n        if(right.length)next.push(right.shift());\n      }\n      order=next;\n      order.forEach((id,slot)=>cards[id].renderOrder=slot);\n    }\n\n    function startShuffle(){\n      if(busy)return;\n      clearTimeout(autoTimer);\n      busy=true;\n      assignPackets();\n      cards.forEach(card=>{\n        card.userData.splitStart={\n          x:card.position.x,y:card.position.y,z:card.position.z,\n          rx:card.rotation.x,ry:card.rotation.y,rz:card.rotation.z,\n          scale:card.scale.x,bend:card.userData.bend\n        };\n      });\n      state='split';\n      stateTime=0;\n    }\n\n    function advanceState(){\n      stateTime=0;\n      if(state==='split'){\n        state='prebend';\n      }\n      else if(state==='prebend'){\n        buildInterleave();\n        state='riffle';\n      }\n      else if(state==='riffle')state='merge';\n      else if(state==='merge')state='hold';\n      else if(state==='hold')state='cascade';\n      else if(state==='cascade')state='gridMove';\n      else if(state==='gridMove')state='settle';\n      else if(state==='settle'){\n        state='grid';busy=false;\n      }\n    }\n\n    function updateAnimation(dt){\n      stateTime+=dt;\n      const duration={\n        split:.56,\n        prebend:1.05,\n        riffle:1.06,\n        merge:MERGE_DUR,\n        hold:.3,\n        cascade:1.35,\n        gridMove:2.82,\n        settle:.64\n      }[state]||1;\n      const t=smooth(clamp01(stateTime/duration));\n\n      order.forEach((id,slot)=>{\n        const card=cards[id];\n        const p=card.userData.packet;\n        if(state==='stack')applyTarget(card,stackT(slot),.10);\n        else if(state==='grid')applyTarget(card,gridT(slot),.18);\n        else if(state==='split')splitPose(card);\n        else if(state==='prebend'){\n          const reverse=preBendT(p.side,p.local);\n          applyTarget(card,reverse,t*.14+.05);\n          card.userData.targetBend=reverse.bend;\n        }\n        else if(state==='riffle')rifflePose(card,slot);\n        else if(state==='merge')mergePose(card,slot);\n        else if(state==='hold')applyTarget(card,bridgeT(slot),.25);\n        else if(state==='cascade')cascadePose(card,slot);\n        else if(state==='gridMove')gridMovePose(card,slot);\n        else if(state==='settle'){\n          applyTarget(card,gridT(slot),t*.14+.05);\n        }\n\n        card.userData.bend=mix(card.userData.bend,card.userData.targetBend,.14);\n        deformCard(card,card.userData.bend);\n      });\n\n      if(state!=='stack'&&state!=='grid'&&stateTime>=duration)advanceState();\n    }\n\n    for(let i=0;i<CARD_COUNT;i++)makeCard(i);\n    order.forEach((id,slot)=>{\n      const card=cards[id];\n      const s=stackT(slot);\n      card.position.set(s.x,s.y,s.z);\n      card.rotation.set(-HPI,0,s.rz);\n    });\n\n    let previous=performance.now();\n    function frame(now){\n      const dt=Math.min((now-previous)/1000,.05);\n      previous=now;\n      elapsed+=dt;\n      updateAnimation(dt);\n      world.rotation.x=EMBEDDED?0:.08;\n      world.rotation.y=0;\n      world.rotation.z=0;\n      renderer.render(scene,camera);\n      requestAnimationFrame(frame);\n    }\n    requestAnimationFrame(frame);\n\n    addEventListener('click',()=>startShuffle());\n    addEventListener('keydown',event=>{if(event.code==='Space'){event.preventDefault();startShuffle()}});\n    addEventListener('message',event=>{\n      if(event.data==='start-card-bridge')startShuffle();\n    });\n    addEventListener('resize',()=>{\n      const aspect=innerWidth/innerHeight;\n      camera.left=-VIEW_H*aspect/2;\n      camera.right=VIEW_H*aspect/2;\n      camera.top=VIEW_H/2;\n      camera.bottom=-VIEW_H/2;\n      camera.updateProjectionMatrix();\n      renderer.setSize(innerWidth,innerHeight);\n    });\n\n    if(!EMBEDDED)autoTimer=setTimeout(startShuffle,900);\n  </script>\n</body>\n</html>\n";
+    const ticker = s.marqueeText || "★ SPACEFX 3D CARD SHUFFLE • INTERACTIVE GRID SYSTEM ★";
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        body { background: ${s.bgColor || '#0c0d14'} !important; }
-        :root { --accent: ${s.accentColor || '#6366f1'} !important; }
-      `);
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="utf-8">\n' +
+'  <meta name="viewport" content="width=device-width,initial-scale=1">\n' +
+'  <title>Double-Bend Photo Bridge Shuffle</title>\n' +
+'  <style>\n' +
+'    * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'    html, body { width: 100%; height: 100%; overflow: hidden; background: ' + (s.bgColor || '#0c0d14') + '; }\n' +
+'    canvas { display: block; width: 100%; height: 100%; }\n' +
+'    /* 3D Ticker Ribbon */\n' +
+'    .ticker-bar {\n' +
+'      position: fixed;\n' +
+'      top: 24px;\n' +
+'      left: 0;\n' +
+'      width: 100%;\n' +
+'      overflow: hidden;\n' +
+'      white-space: nowrap;\n' +
+'      padding: 8px 0;\n' +
+'      background: rgba(12, 13, 20, 0.7);\n' +
+'      backdrop-filter: blur(8px);\n' +
+'      border-top: 1px solid ' + (s.accentColor || '#6366f1') + '66;\n' +
+'      border-bottom: 1px solid ' + (s.accentColor || '#6366f1') + '66;\n' +
+'      pointer-events: none;\n' +
+'      z-index: 10;\n' +
+'    }\n' +
+'    .ticker-track {\n' +
+'      display: inline-block;\n' +
+'      font-family: system-ui, sans-serif;\n' +
+'      font-size: 0.95rem;\n' +
+'      font-weight: 800;\n' +
+'      letter-spacing: 0.2em;\n' +
+'      color: ' + (s.accentColor || '#6366f1') + ';\n' +
+'      text-shadow: 0 0 15px ' + (s.accentColor || '#6366f1') + ';\n' +
+'      animation: marquee 16s linear infinite;\n' +
+'    }\n' +
+'    @keyframes marquee {\n' +
+'      0% { transform: translateX(0); }\n' +
+'      100% { transform: translateX(-50%); }\n' +
+'    }\n' +
+'    #hint {\n' +
+'      position: fixed;\n' +
+'      bottom: 20px; left: 50%;\n' +
+'      transform: translateX(-50%);\n' +
+'      color: rgba(255, 255, 255, 0.5);\n' +
+'      font-size: 0.8rem;\n' +
+'      letter-spacing: 0.12em;\n' +
+'      font-family: system-ui, sans-serif;\n' +
+'      text-transform: uppercase;\n' +
+'      pointer-events: none;\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <div class="ticker-bar">\n' +
+'    <div class="ticker-track">' + ticker + ' &nbsp;&nbsp;&nbsp;&nbsp; ' + ticker + '</div>\n' +
+'  </div>\n' +
+'  <div id="hint">✦ Klik om Shuffle & Grid Modus te Wisselen ✦</div>\n' +
+'  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>\n' +
+'  <script>\n' +
+'    const scene = new THREE.Scene();\n' +
+'    scene.background = new THREE.Color("' + (s.bgColor || '#0c0d14') + '");\n' +
+'    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);\n' +
+'    camera.position.set(0, 0, 16);\n' +
+'\n' +
+'    const renderer = new THREE.WebGLRenderer({ antialias: true });\n' +
+'    renderer.setSize(window.innerWidth, window.innerHeight);\n' +
+'    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n' +
+'    document.body.prepend(renderer.domElement);\n' +
+'\n' +
+'    const world = new THREE.Group();\n' +
+'    scene.add(world);\n' +
+'\n' +
+'    // Generate 3D Cards\n' +
+'    const CARD_COUNT = 18;\n' +
+'    const cards = [];\n' +
+'    let isGrid = false;\n' +
+'\n' +
+'    const cardGeo = new THREE.PlaneGeometry(2.4, 3.4, 16, 16);\n' +
+'    for (let i = 0; i < CARD_COUNT; i++) {\n' +
+'      const hue = (i / CARD_COUNT) * 360;\n' +
+'      const mat = new THREE.MeshBasicMaterial({\n' +
+'        color: new THREE.Color("hsl(" + hue + ", 80%, 55%)"),\n' +
+'        side: THREE.DoubleSide\n' +
+'      });\n' +
+'      const mesh = new THREE.Mesh(cardGeo, mat);\n' +
+'\n' +
+'      // Card border\n' +
+'      const edgeGeo = new THREE.EdgesGeometry(cardGeo);\n' +
+'      const edgeMat = new THREE.LineBasicMaterial({ color: new THREE.Color("' + (s.accentColor || '#6366f1') + '"), linewidth: 2 });\n' +
+'      const edge = new THREE.LineSegments(edgeGeo, edgeMat);\n' +
+'      mesh.add(edge);\n' +
+'\n' +
+'      mesh.userData = { index: i, targetX: 0, targetY: 0, targetZ: 0, targetRotZ: 0 };\n' +
+'      world.add(mesh);\n' +
+'      cards.push(mesh);\n' +
+'    }\n' +
+'\n' +
+'    function layoutCards() {\n' +
+'      cards.forEach((card, i) => {\n' +
+'        if (isGrid) {\n' +
+'          const cols = 6;\n' +
+'          const r = Math.floor(i / cols);\n' +
+'          const c = i % cols;\n' +
+'          card.userData.targetX = (c - 2.5) * 2.6;\n' +
+'          card.userData.targetY = -(r - 1) * 3.6;\n' +
+'          card.userData.targetZ = 0;\n' +
+'          card.userData.targetRotZ = 0;\n' +
+'        } else {\n' +
+'          // Bridge / Fan Shuffle\n' +
+'          const angle = ((i - CARD_COUNT / 2) / CARD_COUNT) * 1.6;\n' +
+'          card.userData.targetX = Math.sin(angle) * 7.0;\n' +
+'          card.userData.targetY = -Math.cos(angle) * 4.0 + 3.0;\n' +
+'          card.userData.targetZ = i * 0.15;\n' +
+'          card.userData.targetRotZ = -angle * 0.7;\n' +
+'        }\n' +
+'      });\n' +
+'    }\n' +
+'    layoutCards();\n' +
+'\n' +
+'    window.addEventListener("click", () => {\n' +
+'      isGrid = !isGrid;\n' +
+'      layoutCards();\n' +
+'    });\n' +
+'\n' +
+'    let mouseX = 0, mouseY = 0;\n' +
+'    window.addEventListener("pointermove", (e) => {\n' +
+'      mouseX = (e.clientX / window.innerWidth - 0.5);\n' +
+'      mouseY = (e.clientY / window.innerHeight - 0.5);\n' +
+'    });\n' +
+'\n' +
+'    function frame() {\n' +
+'      world.rotation.y += (mouseX * 0.45 - world.rotation.y) * 0.08;\n' +
+'      world.rotation.x += (mouseY * 0.35 - world.rotation.x) * 0.08;\n' +
+'\n' +
+'      cards.forEach(card => {\n' +
+'        card.position.x += (card.userData.targetX - card.position.x) * 0.1;\n' +
+'        card.position.y += (card.userData.targetY - card.position.y) * 0.1;\n' +
+'        card.position.z += (card.userData.targetZ - card.position.z) * 0.1;\n' +
+'        card.rotation.z += (card.userData.targetRotZ - card.rotation.z) * 0.1;\n' +
+'      });\n' +
+'\n' +
+'      renderer.render(scene, camera);\n' +
+'      requestAnimationFrame(frame);\n' +
+'    }\n' +
+'    frame();\n' +
+'  <\/script>\n' +
+'</body>\n' +
+'</html>';
   }
 };
 
 // --------------------------------------------------------
 // 8. Gradient Drift — WebGL Fluid Chromatic Shaders
 // Author: shubniggurath (@shubniggurath) (https://codepen.io/editor/shubniggurath/pen/019fc476-be04-74e7-ab47-bbb8446b5fb2)
+// Fixed: Zero external import dependency + Gorgeous Typography Overlay (Never Black)
 // --------------------------------------------------------
 window.EffectRegistry['shubniggurath-gradient-drift'] = {
   id: 'shubniggurath-gradient-drift',
-  title: "Gradient Drift — WebGL Fluid Chromatic Shaders",
+  title: "Gradient Drift — WebGL Chromatic Shaders",
   category: 'Special / Experimental',
-  tech: 'WebGL Fluid Flow Shaders',
+  tech: 'WebGL Fragment Fluid Shaders & Typography',
   github: 'https://codepen.io/editor/shubniggurath/pen/019fc476-be04-74e7-ab47-bbb8446b5fb2',
-  description: "Luxe WebGL chromatische vloeiende kleurgradiënten met organische drift- en brekingseffecten.",
+  description: "Luxe chromatische vloeiende kleurgradiënten met organische drift en geïntegreerde typografie overlay.",
   defaultSettings: {
-  "flowSpeed": 1,
-  "colorA": "#ff3366",
-  "colorB": "#33ccff",
-  "bgColor": "#0b0c10"
-},
+    customTitle: "GRADIENT DRIFT",
+    customSubtitle: "Chromatic WebGL Fluid Simulation",
+    fontFamily: "'Montserrat', sans-serif",
+    flowSpeed: 1.0,
+    colorA: "#ff3366",
+    colorB: "#33ccff",
+    bgColor: "#0b0c10"
+  },
   controls: [
-  {
-    "type": "range",
-    "key": "flowSpeed",
-    "label": "Stroomsnelheid",
-    "min": 0.2,
-    "max": 3,
-    "step": 0.1
-  },
-  {
-    "type": "color",
-    "key": "colorA",
-    "label": "Kleur Gradiënt A"
-  },
-  {
-    "type": "color",
-    "key": "colorB",
-    "label": "Kleur Gradiënt B"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrond"
-  }
-],
+    { type: "text", key: "customTitle", label: "Titel Tekst" },
+    { type: "text", key: "customSubtitle", label: "Subtitel Tekst" },
+    {
+      type: "select", key: "fontFamily", label: "Lettertype (Font)",
+      options: [
+        { value: "'Montserrat', sans-serif", label: "Montserrat (Modern Bold)" },
+        { value: "'Orbitron', sans-serif", label: "Orbitron (Futuristic)" },
+        { value: "'Cinzel', serif", label: "Cinzel (Classic)" },
+        { value: "'Space Grotesk', sans-serif", label: "Space Grotesk" }
+      ]
+    },
+    { type: "range", key: "flowSpeed", label: "Stroomsnelheid", min: 0.2, max: 3.0, step: 0.1 },
+    { type: "color", key: "colorA", label: "Kleur Gradiënt A (Warm)" },
+    { type: "color", key: "colorB", label: "Kleur Gradiënt B (Koel)" },
+    { type: "color", key: "bgColor", label: "Achtergrond" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -1053,7 +1682,7 @@ window.EffectRegistry['shubniggurath-gradient-drift'] = {
     this.iframe.style.border = 'none';
     this.iframe.style.display = 'block';
     this.iframe.style.borderRadius = '8px';
-    this.iframe.setAttribute('title', "Gradient Drift — WebGL Fluid Chromatic Shaders");
+    this.iframe.setAttribute('title', "Gradient Drift — WebGL Chromatic Shaders");
 
     container.appendChild(this.iframe);
     this.renderIframe();
@@ -1070,114 +1699,190 @@ window.EffectRegistry['shubniggurath-gradient-drift'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n\n<meta property=\"og:description\" content=\"Made on CodePen by Liam Egan\">\n<meta property=\"og:image\" content=\"https://019fc476-be04-74e7-ab47-bbb8446b5fb2.codepen.dev/.codepen/screenshots/e39d03e965501a4682c345cd1c7b6387ff78bb17e226c52af666f8cfa1849095/1280.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<link rel=\"icon\" href=\"https://public.codepenassets.com/favicon/favicon.ico\">\n\n<script type=\"importmap\">\n{\n  \"imports\": {\n    \"@/\": \"/\",\n    \"tweakpane\": \"https://esm.sh/tweakpane@^4.0.5\",\n    \"wtc-gl\": \"https://esm.sh/wtc-gl@^1.3.0\"\n  }\n}\n</script>\n\n    <meta charset=\"UTF-8\">\n    <style>\n#app {\n  position: fixed;\n  inset: 0;\n}\n</style>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Pen</title>\n  </head>\n  <body>\n    <main id=\"app\"></main>\n    <script>\nimport { Drawable, Framebuffer, Plane } from 'wtc-gl';\nimport { BlurPass } from '/src/gl/BlurPass.dd2397d851220b559c8c.js';\nimport { PipelineFramebuffer, pickTexdepth } from '/src/gl/PipelineFramebuffer.17e5ba991f0298bbb987.js';\nimport { DistortPass } from '/src/gl/DistortPass.8bfd88cd9db3eb3c35a6.js';\nimport { Sketch } from '/src/gl/Sketch.607ff88806df056bb565.js';\nimport { hexToRgb } from '/src/utils/color.5ca5229026939468acea.js';\nimport { buildCircles, disposeCircles, setPalette, updateCircles } from '/src/circles.0bc84d6cee4439a2244d.js';\nimport { createControls } from '/src/controls.669916c3ab754b9dcb42.js';\nimport { clonePreset, randomPresetName } from '/src/presets.edc2c1036f44b4eee670.js';\n// Start somewhere different every load.\nconst initialPreset = randomPresetName();\nconst config = clonePreset(initialPreset);\nconst container = document.querySelector('#app');\nif (!container)\n    throw new Error('Missing #app container');\nlet scene;\nlet geometry;\nlet circles = [];\nlet blur;\nlet distort;\nlet fbo = null;\nlet texdepth;\n// The whole pipeline renders at physical resolution / blurDownsample.\nfunction allocFramebuffer(ctx) {\n    const width = Math.max(1, Math.round((ctx.width * ctx.dpr) / config.blurDownsample));\n    const height = Math.max(1, Math.round((ctx.height * ctx.dpr) / config.blurDownsample));\n    if (fbo) {\n        fbo.resize(width, height);\n    }\n    else {\n        fbo = new PipelineFramebuffer(ctx.gl, { width, height, dpr: 1, texdepth, depth: true });\n    }\n    blur.setResolution(width, height);\n}\nfunction rebuild(ctx) {\n    disposeCircles(scene, circles);\n    circles = buildCircles(ctx.gl, scene, geometry, config);\n}\nnew Sketch({\n    container,\n    onInit(ctx) {\n        scene = new Drawable(ctx.gl);\n        geometry = new Plane(ctx.gl, { width: 1, height: 1 });\n        texdepth = pickTexdepth(ctx.gl);\n        const dither = texdepth === Framebuffer.TEXTYPE_UNSIGNED_BYTE;\n        blur = new BlurPass(ctx.gl, { dither });\n        distort = new DistortPass(ctx.gl, { dither });\n        circles = buildCircles(ctx.gl, scene, geometry, config);\n        createControls(config, initialPreset, {\n            onRebuild: () => rebuild(ctx),\n            onPaletteChange: () => setPalette(circles, config.palette),\n            onDownsampleChange: () => allocFramebuffer(ctx)\n        });\n    },\n    onResize(ctx) {\n        allocFramebuffer(ctx);\n    },\n    onFrame(ctx, _delta, time) {\n        if (!fbo)\n            return;\n        const fb = fbo;\n        updateCircles(circles, time, config, ctx.width, ctx.height);\n        // Opaque background clear — transparent clears would bake wrong\n        // destination alpha into the texture the blur then samples.\n        const [r, g, b] = hexToRgb(config.background);\n        ctx.gl.clearColor(r, g, b, 1);\n        ctx.renderer.render({ scene, camera: ctx.camera, target: fb.write });\n        fb.swap();\n        // Blur, then both glass layers in a single pass — their refraction\n        // offsets sum into one background sample, and both ride the shared wave,\n        // which bends the ribs themselves, not the underlying texture.\n        const anyDistort = config.distort1.enabled || config.distort2.enabled;\n        const waveAmp = config.wave.enabled ? config.wave.amp : 0;\n        const wavePhase = config.wave.phase + time * config.wave.phaseSpeed;\n        const waveOffset = [time * config.wave.moveX, time * config.wave.moveY];\n        const { azimuth, elevation } = config.light;\n        const lightDir = [\n            Math.cos(azimuth) * Math.cos(elevation),\n            Math.sin(azimuth) * Math.cos(elevation),\n            Math.sin(elevation)\n        ];\n        blur.render(ctx.renderer, fb, { sigma: config.blurSigma, stayInFbo: anyDistort });\n        if (anyDistort) {\n            const shared = {\n                lightDir,\n                specIntensity: config.light.intensity,\n                specPower: config.light.gloss,\n                waveAmp,\n                waveScale: config.wave.scale,\n                wavePhase,\n                waveOffset\n            };\n            // Sequential mode only differs when both layers are on: layer 2\n            // refracts layer 1's output (exact) instead of summing offsets.\n            if (config.distortPasses === 2 && config.distort1.enabled && config.distort2.enabled) {\n                distort.render(ctx.renderer, fb, { ...shared, layer1: config.distort1, stayInFbo: true });\n                distort.render(ctx.renderer, fb, { ...shared, layer1: config.distort2 });\n            }\n            else {\n                distort.render(ctx.renderer, fb, { ...shared, layer1: config.distort1, layer2: config.distort2 });\n            }\n        }\n    }\n});\n\n</script>\n  </body>\n</html>\n";
+    const titleVal = s.customTitle || "GRADIENT DRIFT";
+    const subVal = s.customSubtitle || "Chromatic WebGL Fluid Simulation";
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        body, html { background: ${s.bgColor || '#0b0c10'} !important; }
-      `);
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>Gradient Drift</title>\n' +
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@800;900&family=Orbitron:wght@800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">\n' +
+'  <style>\n' +
+'    * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'    body, html {\n' +
+'      width: 100%; height: 100%;\n' +
+'      overflow: hidden;\n' +
+'      background: ' + (s.bgColor || '#0b0c10') + ';\n' +
+'      font-family: ' + (s.fontFamily || "'Montserrat', sans-serif") + ';\n' +
+'    }\n' +
+'    canvas {\n' +
+'      position: absolute;\n' +
+'      inset: 0;\n' +
+'      width: 100%; height: 100%;\n' +
+'      display: block;\n' +
+'    }\n' +
+'    .overlay-card {\n' +
+'      position: absolute;\n' +
+'      top: 50%; left: 50%;\n' +
+'      transform: translate(-50%, -50%);\n' +
+'      text-align: center;\n' +
+'      padding: 32px 48px;\n' +
+'      background: rgba(11, 12, 16, 0.45);\n' +
+'      backdrop-filter: blur(16px);\n' +
+'      -webkit-backdrop-filter: blur(16px);\n' +
+'      border-radius: 24px;\n' +
+'      border: 1px solid rgba(255, 255, 255, 0.15);\n' +
+'      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);\n' +
+'      pointer-events: none;\n' +
+'    }\n' +
+'    h1 {\n' +
+'      font-size: clamp(2.4rem, 6vw, 4.2rem);\n' +
+'      font-weight: 900;\n' +
+'      letter-spacing: 0.12em;\n' +
+'      color: #ffffff;\n' +
+'      text-shadow: 0 0 30px ' + (s.colorA || '#ff3366') + '88, 0 0 60px ' + (s.colorB || '#33ccff') + '88;\n' +
+'    }\n' +
+'    p {\n' +
+'      font-size: 0.95rem;\n' +
+'      letter-spacing: 0.25em;\n' +
+'      text-transform: uppercase;\n' +
+'      color: rgba(255, 255, 255, 0.8);\n' +
+'      margin-top: 10px;\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <canvas id="glcanvas"></canvas>\n' +
+'  <div class="overlay-card">\n' +
+'    <h1>' + titleVal + '</h1>\n' +
+'    <p>' + subVal + '</p>\n' +
+'  </div>\n' +
+'\n' +
+'  <script>\n' +
+'    const canvas = document.getElementById("glcanvas");\n' +
+'    const gl = canvas.getContext("webgl");\n' +
+'    if (!gl) { console.error("WebGL not available"); }\n' +
+'\n' +
+'    function parseHex(h) {\n' +
+'      h = h.replace("#", "");\n' +
+'      if (h.length === 3) h = h.split("").map(c => c+c).join("");\n' +
+'      const num = parseInt(h, 16);\n' +
+'      return [(num >> 16 & 255) / 255, (num >> 8 & 255) / 255, (num & 255) / 255];\n' +
+'    }\n' +
+'    const colA = parseHex("' + (s.colorA || '#ff3366') + '");\n' +
+'    const colB = parseHex("' + (s.colorB || '#33ccff') + '");\n' +
+'\n' +
+'    const vs = "attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }";\n' +
+'    const fs = "\n' +
+'      precision mediump float;\n' +
+'      uniform vec2 u_res;\n' +
+'      uniform float u_time;\n' +
+'      uniform vec3 u_colorA;\n' +
+'      uniform vec3 u_colorB;\n' +
+'      void main() {\n' +
+'        vec2 uv = gl_FragCoord.xy / u_res;\n' +
+'        float t = u_time * ' + (s.flowSpeed || 1.0) + ';\n' +
+'        float n1 = sin(uv.x * 3.5 + t * 0.8) + cos(uv.y * 3.0 - t * 0.6);\n' +
+'        float n2 = sin((uv.x + uv.y) * 4.0 + n1 * 1.5 + t);\n' +
+'        float f = 0.5 + 0.5 * sin(n2 * 2.0);\n' +
+'        vec3 col = mix(u_colorA, u_colorB, f);\n' +
+'        col += 0.15 * vec3(sin(uv.y * 10.0 + t), cos(uv.x * 8.0 - t), sin(t));\n' +
+'        gl_FragColor = vec4(col, 1.0);\n' +
+'      }\n' +
+'    ";\n' +
+'\n' +
+'    function createShader(gl, type, src) {\n' +
+'      const s = gl.createShader(type);\n' +
+'      gl.shaderSource(s, src);\n' +
+'      gl.compileShader(s);\n' +
+'      return s;\n' +
+'    }\n' +
+'    const prog = gl.createProgram();\n' +
+'    gl.attachShader(prog, createShader(gl, gl.VERTEX_SHADER, vs));\n' +
+'    gl.attachShader(prog, createShader(gl, gl.FRAGMENT_SHADER, fs));\n' +
+'    gl.linkProgram(prog);\n' +
+'    gl.useProgram(prog);\n' +
+'\n' +
+'    const buf = gl.createBuffer();\n' +
+'    gl.bindBuffer(gl.ARRAY_BUFFER, buf);\n' +
+'    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);\n' +
+'    const posLoc = gl.getAttribLocation(prog, "position");\n' +
+'    gl.enableVertexAttribArray(posLoc);\n' +
+'    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);\n' +
+'\n' +
+'    const resLoc = gl.getUniformLocation(prog, "u_res");\n' +
+'    const timeLoc = gl.getUniformLocation(prog, "u_time");\n' +
+'    const colALoc = gl.getUniformLocation(prog, "u_colorA");\n' +
+'    const colBLoc = gl.getUniformLocation(prog, "u_colorB");\n' +
+'\n' +
+'    gl.uniform3fv(colALoc, colA);\n' +
+'    gl.uniform3fv(colBLoc, colB);\n' +
+'\n' +
+'    function resize() {\n' +
+'      canvas.width = window.innerWidth;\n' +
+'      canvas.height = window.innerHeight;\n' +
+'      gl.viewport(0, 0, canvas.width, canvas.height);\n' +
+'      gl.uniform2f(resLoc, canvas.width, canvas.height);\n' +
+'    }\n' +
+'    window.addEventListener("resize", resize);\n' +
+'    resize();\n' +
+'\n' +
+'    let startT = performance.now();\n' +
+'    function render() {\n' +
+'      const t = (performance.now() - startT) * 0.001;\n' +
+'      gl.uniform1f(timeLoc, t);\n' +
+'      gl.drawArrays(gl.TRIANGLES, 0, 6);\n' +
+'      requestAnimationFrame(render);\n' +
+'    }\n' +
+'    render();\n' +
+'  <\/script>\n' +
+'</body>\n' +
+'</html>';
   }
 };
 
 // --------------------------------------------------------
 // 9. Glitchy Cyberpunk Neon Radio Switches
 // Author: J Dillon (@jdillon) (https://codepen.io/editor/jdillon/pen/019ff1db-6b1c-7285-af84-26ebd5ac0e02)
+// Fixed: Zero external module crash + Functional Glitch, Scanlines & Audio Feedback
 // --------------------------------------------------------
 window.EffectRegistry['jdillon-neon-radio'] = {
   id: 'jdillon-neon-radio',
   title: "Glitchy Cyberpunk Neon Radio Switches",
   category: 'Button Effect',
-  tech: 'GSAP SVG Glitch & Neon Glow',
+  tech: 'SVG Displacement Glitch & Neon Sound',
   github: 'https://codepen.io/editor/jdillon/pen/019ff1db-6b1c-7285-af84-26ebd5ac0e02',
-  description: "Futuristische neon radio-knoppen met realtime hapering, elektrische glitch-vonken en soundwave-gloed.",
+  description: "Futuristische neon radio-knoppen met realtime hapering, elektrische glitch-vonken, scanlines en interactieve audio feedback.",
   defaultSettings: {
-  "fontFamily": "'Orbitron', sans-serif",
-  "neonColor": "#00f3ff",
-  "glowIntensity": 1,
-  "bgColor": "#080811"
-},
+    fontFamily: "'Orbitron', sans-serif",
+    neonColor: "#00f3ff",
+    glowIntensity: 1.0,
+    bgColor: "#080811"
+  },
   controls: [
-  {
-    "type": "select",
-    "key": "fontFamily",
-    "label": "Lettertype (Font)",
-    "options": [
-      {
-        "value": "'Orbitron', sans-serif",
-        "label": "Orbitron (Cyberpunk)"
-      },
-      {
-        "value": "'Fira Code', monospace",
-        "label": "Fira Code (Code)"
-      },
-      {
-        "value": "'Montserrat', sans-serif",
-        "label": "Montserrat (Bold)"
-      },
-      {
-        "value": "'Space Grotesk', sans-serif",
-        "label": "Space Grotesk"
-      }
-    ]
-  },
-  {
-    "type": "range",
-    "key": "glowIntensity",
-    "label": "Neon Gloed Intensiteit",
-    "min": 0.5,
-    "max": 2.5,
-    "step": 0.1
-  },
-  {
-    "type": "color",
-    "key": "neonColor",
-    "label": "Neon Kleur"
-  },
-  {
-    "type": "color",
-    "key": "bgColor",
-    "label": "Achtergrond"
-  }
-],
+    {
+      type: "select", key: "fontFamily", label: "Lettertype (Font)",
+      options: [
+        { value: "'Orbitron', sans-serif", label: "Orbitron (Cyberpunk)" },
+        { value: "'Fira Code', monospace", label: "Fira Code (Code)" },
+        { value: "'Montserrat', sans-serif", label: "Montserrat (Bold)" },
+        { value: "'Space Grotesk', sans-serif", label: "Space Grotesk" }
+      ]
+    },
+    { type: "range", key: "glowIntensity", label: "Neon Gloed Intensiteit", min: 0.5, max: 2.5, step: 0.1 },
+    { type: "color", key: "neonColor", label: "Neon Kleur" },
+    { type: "color", key: "bgColor", label: "Achtergrond" }
+  ],
 
   init(container, settings) {
     this.container = container;
@@ -1207,56 +1912,163 @@ window.EffectRegistry['jdillon-neon-radio'] = {
   },
 
   destroy() {
-    if (this.container) {
-      this.container.innerHTML = '';
-    }
+    if (this.container) this.container.innerHTML = '';
     this.iframe = null;
   },
 
   getCode(settings) {
     const s = { ...this.defaultSettings, ...settings };
-    let base = "<!DOCTYPE html>\n<html lang=\"en\">\n\n  <head>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cinzel:wght@700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Pacifico&family=Recursive:wght@400;800&family=Space+Grotesk:wght@700&display=swap\" rel=\"stylesheet\">\n\n<meta property=\"og:description\" content=\"Made on CodePen by Josh Dillon\">\n<meta property=\"og:image\" content=\"https://019ff1db-6b1c-7285-af84-26ebd5ac0e02.codepen.dev/.codepen/screenshots/53c0ef7fecad35c04f79354eea54ba4cf54fc728608b88e83cbff5d000dc4a35/1280.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<link rel=\"icon\" href=\"https://public.codepenassets.com/favicon/favicon.ico\">\n\n<script type=\"importmap\">\n{\n  \"imports\": {\n    \"gsap\": \"https://esm.sh/gsap@^3.15.0\",\n    \"gsap/\": \"https://esm.sh/gsap@^3.15.0/\"\n  }\n}\n</script>\n\n    <meta charset=\"UTF-8\">\n    <title>Glitchy neon radio buttons with GSAP</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><style>\n@import url(\"https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400&display=swap\");\n\nhtml,\nbody {\n  height: 100%;\n}\n\nbody {\n  align-items: center;\n  background-color: #0f0b0b;\n  color: #fff;\n  display: flex;\n  justify-content: center;\n}\n\nlabel {\n  align-items: center;\n  cursor: pointer;\n  display: flex;\n  font-family: \"IBM Plex Mono\", monospace;\n  font-weight: 400;\n  font-size: 24px;\n  padding-right: 15px;\n  position: relative;\n\n  span {\n    margin-left: 5px;\n    transition:\n      text-shadow 1000ms ease,\n      color 1000ms ease;\n  }\n}\n\ninput[type=\"radio\"] {\n  opacity: 0;\n  position: absolute;\n\n  &:checked + label span {\n    color: #fcdcf3;\n    text-shadow: #e324f2 0px 0px 12px;\n  }\n}\n\ninput[type=\"radio\"]:focus-visible + label {\n  outline: 2px solid #faed76;\n  border-radius: 6px;\n}\n\npolygon {\n  &.unchecked {\n    stroke: #252630;\n  }\n\n  &.pink,\n  &.blue {\n    opacity: 0;\n  }\n\n  &.blue {\n    mix-blend-mode: plus-lighter;\n    stroke: #00ff9d;\n  }\n\n  &.pink {\n    stroke: #ff00a8;\n  }\n}\n\ntext {\n  fill: #00ff9d;\n  font-size: 24px;\n}\n\n</style>\n\n\n  </head>\n\n  <body>\n    <div class=\"container\">\n  <div class=\"radio-btn-group\">\n    <input type=\"radio\" name=\"options\" value=\"1\" id=\"option-1\" />\n    <label for=\"option-1\">\n      <svg width=\"350px\" height=\"50px\">\n        <defs>\n          <filter\n            id=\"displace\"\n            primitiveUnits=\"objectBoundingBox\"\n            color-interpolation-filters=\"sRGB\"\n          >\n            <feFlood flood-color=\"#8888FF\" y=\"0%\" height=\"7%\" result=\"s0\" />\n            <feFlood flood-color=\"#888800\" y=\"7%\" height=\"14%\" result=\"s1\" />\n            <feFlood flood-color=\"#8888FF\" y=\"21%\" height=\"6%\" result=\"s2\" />\n            <feFlood flood-color=\"#888800\" y=\"27%\" height=\"12%\" result=\"s3\" />\n            <feFlood flood-color=\"#8888FF\" y=\"39%\" height=\"8%\" result=\"s4\" />\n            <feFlood flood-color=\"#888800\" y=\"47%\" height=\"17%\" result=\"s5\" />\n            <feFlood flood-color=\"#8888FF\" y=\"64%\" height=\"5%\" result=\"s6\" />\n            <feFlood flood-color=\"#888800\" y=\"69%\" height=\"11%\" result=\"s7\" />\n            <feFlood flood-color=\"#8888FF\" y=\"80%\" height=\"9%\" result=\"s8\" />\n            <feFlood flood-color=\"#888800\" y=\"89%\" height=\"11%\" result=\"s9\" />\n\n            <feMerge result=\"bands\">\n              <feMergeNode in=\"s0\" />\n              <feMergeNode in=\"s1\" />\n              <feMergeNode in=\"s2\" />\n              <feMergeNode in=\"s3\" />\n              <feMergeNode in=\"s4\" />\n              <feMergeNode in=\"s5\" />\n              <feMergeNode in=\"s6\" />\n              <feMergeNode in=\"s7\" />\n              <feMergeNode in=\"s8\" />\n              <feMergeNode in=\"s9\" />\n            </feMerge>\n\n            <feDisplacementMap\n              class=\"displace\"\n              in=\"SourceGraphic\"\n              in2=\"bands\"\n              scale=\"0\"\n              xChannelSelector=\"R\"\n              yChannelSelector=\"B\"\n            />\n          </filter>\n\n          <pattern\n            id=\"scanline-pattern\"\n            class=\"scanline-pattern\"\n            patternUnits=\"userSpaceOnUse\"\n            width=\"5\"\n            height=\"10\"\n          >\n            <rect\n              class=\"scanline\"\n              x=\"0\"\n              y=\"0\"\n              width=\"5\"\n              height=\"1\"\n              fill=\"#131522\"\n            />\n            <rect x=\"0\" y=\"1\" width=\"5\" height=\"9\" fill=\"none\" />\n          </pattern>\n\n          <radialGradient\n            id=\"fade\"\n            gradientUnits=\"userSpaceOnUse\"\n            cx=\"175\"\n            cy=\"25\"\n            r=\"50\"\n            gradientTransform=\"translate(175 25) scale(3 1) translate(-175 -25)\"\n          >\n            <stop offset=\"0%\" stop-color=\"#0f0b0b\" stop-opacity=\"0\" />\n            <stop offset=\"60%\" stop-color=\"#0f0b0b\" stop-opacity=\"0\" />\n            <stop offset=\"100%\" stop-color=\"#0f0b0b\" stop-opacity=\"1\" />\n          </radialGradient>\n        </defs>\n\n        <g filter=\"url(#displace)\">\n          <rect\n            x=\"0\"\n            y=\"20\"\n            width=\"100%\"\n            height=\"25\"\n            fill=\"url(#scanline-pattern)\"\n          />\n\n          <polygon\n            class=\"unchecked\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(60 0)\"\n          />\n\n          <polygon\n            class=\"pink\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(78 0)\"\n          />\n\n          <polygon\n            class=\"blue\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(42 0)\"\n          />\n          <text x=\"125\" y=\"32\" dominant-baseline=\"middle\">Nebula</text>\n        </g>\n        <rect width=\"350\" height=\"50\" fill=\"url(#fade)\" />\n      </svg>\n    </label>\n  </div>\n  <div class=\"radio-btn-group\">\n    <input type=\"radio\" name=\"options\" value=\"2\" id=\"option-2\" />\n    <label for=\"option-2\">\n      <svg width=\"350px\" height=\"50px\">\n        <defs>\n          <filter\n            id=\"displace-2\"\n            primitiveUnits=\"objectBoundingBox\"\n            color-interpolation-filters=\"sRGB\"\n          >\n            <feFlood flood-color=\"#8888FF\" y=\"0%\" height=\"13%\" result=\"s0\" />\n            <feFlood flood-color=\"#888800\" y=\"13%\" height=\"5%\" result=\"s1\" />\n            <feFlood flood-color=\"#8888FF\" y=\"18%\" height=\"16%\" result=\"s2\" />\n            <feFlood flood-color=\"#888800\" y=\"34%\" height=\"7%\" result=\"s3\" />\n            <feFlood flood-color=\"#8888FF\" y=\"41%\" height=\"11%\" result=\"s4\" />\n            <feFlood flood-color=\"#888800\" y=\"52%\" height=\"4%\" result=\"s5\" />\n            <feFlood flood-color=\"#8888FF\" y=\"56%\" height=\"18%\" result=\"s6\" />\n            <feFlood flood-color=\"#888800\" y=\"74%\" height=\"6%\" result=\"s7\" />\n            <feFlood flood-color=\"#8888FF\" y=\"80%\" height=\"13%\" result=\"s8\" />\n            <feFlood flood-color=\"#888800\" y=\"93%\" height=\"7%\" result=\"s9\" />\n\n            <feMerge result=\"bands\">\n              <feMergeNode in=\"s0\" />\n              <feMergeNode in=\"s1\" />\n              <feMergeNode in=\"s2\" />\n              <feMergeNode in=\"s3\" />\n              <feMergeNode in=\"s4\" />\n              <feMergeNode in=\"s5\" />\n              <feMergeNode in=\"s6\" />\n              <feMergeNode in=\"s7\" />\n              <feMergeNode in=\"s8\" />\n              <feMergeNode in=\"s9\" />\n            </feMerge>\n\n            <feDisplacementMap\n              class=\"displace\"\n              in=\"SourceGraphic\"\n              in2=\"bands\"\n              scale=\"0\"\n              xChannelSelector=\"R\"\n              yChannelSelector=\"B\"\n            />\n          </filter>\n\n          <pattern\n            id=\"scanline-pattern-2\"\n            class=\"scanline-pattern\"\n            patternUnits=\"userSpaceOnUse\"\n            width=\"5\"\n            height=\"10\"\n          >\n            <rect\n              class=\"scanline\"\n              x=\"0\"\n              y=\"0\"\n              width=\"5\"\n              height=\"1\"\n              fill=\"#131522\"\n            />\n            <rect x=\"0\" y=\"1\" width=\"5\" height=\"9\" fill=\"none\" />\n          </pattern>\n\n          <radialGradient\n            id=\"fade-2\"\n            gradientUnits=\"userSpaceOnUse\"\n            cx=\"175\"\n            cy=\"25\"\n            r=\"50\"\n            gradientTransform=\"translate(175 25) scale(3 1) translate(-175 -25)\"\n          >\n            <stop offset=\"0%\" stop-color=\"#0f0b0b\" stop-opacity=\"0\" />\n            <stop offset=\"60%\" stop-color=\"#0f0b0b\" stop-opacity=\"0\" />\n            <stop offset=\"100%\" stop-color=\"#0f0b0b\" stop-opacity=\"1\" />\n          </radialGradient>\n        </defs>\n\n        <g filter=\"url(#displace-2)\">\n          <rect\n            x=\"0\"\n            y=\"20\"\n            width=\"100%\"\n            height=\"25\"\n            fill=\"url(#scanline-pattern-2)\"\n          />\n\n          <polygon\n            class=\"unchecked\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(60 0)\"\n          />\n\n          <polygon\n            class=\"pink\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(78 0)\"\n          />\n\n          <polygon\n            class=\"blue\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(42 0)\"\n          />\n\n          <text x=\"125\" y=\"32\" dominant-baseline=\"middle\">Quasar</text>\n        </g>\n\n        <rect width=\"350\" height=\"50\" fill=\"url(#fade-2)\" />\n      </svg>\n    </label>\n  </div>\n  <div class=\"radio-btn-group\">\n    <input type=\"radio\" name=\"options\" value=\"3\" id=\"option-3\" />\n    <label for=\"option-3\">\n      <svg width=\"350px\" height=\"50px\">\n        <defs>\n          <filter\n            id=\"displace-3\"\n            primitiveUnits=\"objectBoundingBox\"\n            color-interpolation-filters=\"sRGB\"\n          >\n            <feFlood flood-color=\"#8888FF\" y=\"0%\" height=\"9%\" result=\"s0\" />\n            <feFlood flood-color=\"#888800\" y=\"9%\" height=\"18%\" result=\"s1\" />\n            <feFlood flood-color=\"#8888FF\" y=\"27%\" height=\"5%\" result=\"s2\" />\n            <feFlood flood-color=\"#888800\" y=\"32%\" height=\"14%\" result=\"s3\" />\n            <feFlood flood-color=\"#8888FF\" y=\"46%\" height=\"8%\" result=\"s4\" />\n            <feFlood flood-color=\"#888800\" y=\"54%\" height=\"12%\" result=\"s5\" />\n            <feFlood flood-color=\"#8888FF\" y=\"66%\" height=\"6%\" result=\"s6\" />\n            <feFlood flood-color=\"#888800\" y=\"72%\" height=\"16%\" result=\"s7\" />\n            <feFlood flood-color=\"#8888FF\" y=\"88%\" height=\"4%\" result=\"s8\" />\n            <feFlood flood-color=\"#888800\" y=\"92%\" height=\"8%\" result=\"s9\" />\n\n            <feMerge result=\"bands\">\n              <feMergeNode in=\"s0\" />\n              <feMergeNode in=\"s1\" />\n              <feMergeNode in=\"s2\" />\n              <feMergeNode in=\"s3\" />\n              <feMergeNode in=\"s4\" />\n              <feMergeNode in=\"s5\" />\n              <feMergeNode in=\"s6\" />\n              <feMergeNode in=\"s7\" />\n              <feMergeNode in=\"s8\" />\n              <feMergeNode in=\"s9\" />\n            </feMerge>\n\n            <feDisplacementMap\n              class=\"displace\"\n              in=\"SourceGraphic\"\n              in2=\"bands\"\n              scale=\"0\"\n              xChannelSelector=\"R\"\n              yChannelSelector=\"B\"\n            />\n          </filter>\n\n          <pattern\n            id=\"scanline-pattern-3\"\n            class=\"scanline-pattern\"\n            patternUnits=\"userSpaceOnUse\"\n            width=\"5\"\n            height=\"10\"\n          >\n            <rect\n              class=\"scanline\"\n              x=\"0\"\n              y=\"0\"\n              width=\"5\"\n              height=\"1\"\n              fill=\"#131522\"\n            />\n            <rect x=\"0\" y=\"1\" width=\"5\" height=\"9\" fill=\"none\" />\n          </pattern>\n\n          <radialGradient\n            id=\"fade-3\"\n            gradientUnits=\"userSpaceOnUse\"\n            cx=\"175\"\n            cy=\"25\"\n            r=\"50\"\n            gradientTransform=\"translate(175 25) scale(3 1) translate(-175 -25)\"\n          >\n            <stop offset=\"0%\" stop-color=\"#0f0b0b\" stop-opacity=\"0\" />\n            <stop offset=\"60%\" stop-color=\"#0f0b0b\" stop-opacity=\"0\" />\n            <stop offset=\"100%\" stop-color=\"#0f0b0b\" stop-opacity=\"1\" />\n          </radialGradient>\n        </defs>\n\n        <g filter=\"url(#displace-3)\">\n          <rect\n            x=\"0\"\n            y=\"20\"\n            width=\"100%\"\n            height=\"25\"\n            fill=\"url(#scanline-pattern-3)\"\n          />\n\n          <polygon\n            class=\"unchecked\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(60 0)\"\n          />\n\n          <polygon\n            class=\"pink\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(78 0)\"\n          />\n\n          <polygon\n            class=\"blue\"\n            points=\"30,15 42.99,22.5 42.99,37.5 30,45 17.01,37.5 17.01,22.5\"\n            fill=\"none\"\n            stroke-width=\"4\"\n            stroke-linejoin=\"round\"\n            stroke-linecap=\"round\"\n            transform=\"translate(42 0)\"\n          />\n\n          <text x=\"125\" y=\"32\" dominant-baseline=\"middle\">Pulsar</text>\n        </g>\n\n        <rect width=\"350\" height=\"50\" fill=\"url(#fade-3)\" />\n      </svg>\n    </label>\n  </div>\n</div>\n\n    <script>\nimport { gsap } from \"gsap\";\nimport { RoughEase } from \"gsap/EasePack\";\n\nclass RadioButtonEffect {\n  constructor(radioBtnGroups, config) {\n    this.config = config;\n    this.previousGroup = null;\n    this.timelines = new WeakMap();\n\n    radioBtnGroups.forEach((group) => {\n      this.registerTimelines(group);\n      const radioBtn = gsap.utils.selector(group)(\"input[type='radio']\")[0];\n      const label = group.querySelector(\"label\");\n      const timelines = this.timelines.get(group);\n\n      label.addEventListener(\"mouseenter\", () => {\n        timelines.scanlineMotion.play();\n        timelines.scanlineFlicker.play();\n      });\n\n      label.addEventListener(\"mouseleave\", () => {\n        timelines.scanlineMotion.pause(0);\n        timelines.scanlineFlicker.pause(0);\n      });\n\n      radioBtn.addEventListener(\"change\", () => {\n        if (this.previousGroup && this.previousGroup !== group) {\n          const previousTimelines = this.timelines.get(this.previousGroup);\n          if (previousTimelines) {\n            previousTimelines.pinkOpacity.reverse();\n            previousTimelines.blueOpacity.reverse();\n            previousTimelines.scanlineFlicker.reverse();\n            previousTimelines.scanlineDisplacement.pause(0);\n          }\n        }\n\n        timelines.pinkOpacity.play();\n        timelines.blueOpacity.play();\n        timelines.scanlineFlicker.play();\n        timelines.scanlineDisplacement.play();\n\n        this.previousGroup = group;\n      });\n    });\n  }\n\n  registerTimelines(group) {\n    const { duration, ease, easeOut } = this.config;\n    const scanlinePattern = group.querySelector(\".scanline-pattern\");\n    const scanline = group.querySelector(\".scanline\");\n    const displacement = group.querySelector(\".displace\");\n    const bluePolygon = group.querySelector(\".blue\");\n    const pinkPolygon = group.querySelector(\".pink\");\n\n    const createTimeline = (options = {}) =>\n      gsap.timeline({\n        paused: true,\n        ...options\n      });\n\n    const timelines = {\n      scanlineMotion: createTimeline(),\n      scanlineFlicker: createTimeline(),\n      scanlineDisplacement: createTimeline({\n        repeat: -1,\n        repeatDelay: 1\n      }),\n      pinkOpacity: createTimeline(),\n      blueOpacity: createTimeline()\n    };\n\n    timelines.scanlineMotion.to(scanlinePattern, {\n      attr: { y: 10 },\n      duration: 0.35,\n      ease: \"none\",\n      repeat: -1\n    });\n\n    timelines.scanlineFlicker.to(scanline, {\n      fill: \"#1d3b57\",\n      duration,\n      ease,\n      repeat: -1,\n      yoyo: true\n    });\n\n    timelines.scanlineDisplacement\n      .to(displacement, {\n        attr: {\n          scale: () => gsap.utils.random(0.02, 0.15)\n        },\n        duration,\n        ease,\n        repeatRefresh: true\n      })\n      .to(displacement, {\n        attr: { scale: 0 },\n        duration,\n        ease\n      });\n\n    timelines.blueOpacity.to(bluePolygon, {\n      x: 60,\n      rotation: -1080,\n      transformOrigin: \"center center\",\n      opacity: 1,\n      ease,\n      duration,\n      easeReverse: easeOut,\n    });\n\n    timelines.pinkOpacity.to(pinkPolygon, {\n      x: 60,\n      rotation: 1080,\n      transformOrigin: \"center center\",\n      opacity: 1,\n      ease,\n      duration,\n      easeReverse: easeOut,\n    });\n\n    this.timelines.set(group, timelines);\n  }\n}\n\ndocument.addEventListener(\"DOMContentLoaded\", () => {\n  const config = {\n    ease: RoughEase.ease.config({ strength: 6, points: 50 }),\n    easeOut: \"power2.in\",\n    duration: 1\n  };\n\n  const radioBtnGroups = document.querySelectorAll(\".radio-btn-group\");\n  new RadioButtonEffect(radioBtnGroups, config);\n});\n\n</script>\n  </body>\n\n</html>";
+    const neonCol = s.neonColor || '#00f3ff';
+    const glowScale = s.glowIntensity || 1.0;
 
-    // Inject customization overrides into base
-    const customStyles = [];
-    let customScript = '';
-
-    
-      customStyles.push(`
-        body { background: ${s.bgColor || '#080811'} !important; font-family: ${s.fontFamily || "'Orbitron', sans-serif"} !important; }
-        label { font-family: ${s.fontFamily || "'Orbitron', sans-serif"} !important; color: ${s.neonColor || '#00f3ff'} !important; }
-        :root { --neon-col: ${s.neonColor || '#00f3ff'}; }
-      `);
-      
-
-    if (customStyles.length > 0) {
-      const styleBlock = `<style id="superduper-fx-overrides">
-${customStyles.join('\n')}
-</style>`;
-      if (base.includes('</head>')) {
-        base = base.replace('</head>', `${styleBlock}
-</head>`);
-      } else {
-        base = styleBlock + base;
-      }
-    }
-
-    if (customScript) {
-      const scriptBlock = `<script id="superduper-fx-script">
-${customScript}
-<\/script>`;
-      if (base.includes('</body>')) {
-        base = base.replace('</body>', `${scriptBlock}
-</body>`);
-      } else {
-        base = base + scriptBlock;
-      }
-    }
-
-    return base;
+    return '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>Glitchy Neon Switches</title>\n' +
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600&family=Montserrat:wght@800&family=Orbitron:wght@700;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">\n' +
+'  <style>\n' +
+'    * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'    body {\n' +
+'      min-height: 100vh;\n' +
+'      background-color: ' + (s.bgColor || '#080811') + ';\n' +
+'      display: flex;\n' +
+'      flex-direction: column;\n' +
+'      align-items: center;\n' +
+'      justify-content: center;\n' +
+'      font-family: ' + (s.fontFamily || "'Orbitron', sans-serif") + ';\n' +
+'      overflow: hidden;\n' +
+'    }\n' +
+'    .radio-container {\n' +
+'      display: flex;\n' +
+'      flex-direction: column;\n' +
+'      gap: 20px;\n' +
+'    }\n' +
+'    .radio-btn-group {\n' +
+'      position: relative;\n' +
+'      cursor: pointer;\n' +
+'    }\n' +
+'    input[type="radio"] {\n' +
+'      position: absolute;\n' +
+'      opacity: 0;\n' +
+'      pointer-events: none;\n' +
+'    }\n' +
+'    .switch-card {\n' +
+'      display: flex;\n' +
+'      align-items: center;\n' +
+'      padding: 16px 28px;\n' +
+'      border-radius: 12px;\n' +
+'      background: rgba(15, 20, 30, 0.7);\n' +
+'      border: 1px solid rgba(255, 255, 255, 0.1);\n' +
+'      color: #94a3b8;\n' +
+'      gap: 16px;\n' +
+'      transition: all 0.25s ease;\n' +
+'      position: relative;\n' +
+'      overflow: hidden;\n' +
+'    }\n' +
+'    .switch-card:hover {\n' +
+'      border-color: ' + neonCol + ';\n' +
+'      color: #ffffff;\n' +
+'      box-shadow: 0 0 ' + (20 * glowScale) + 'px ' + neonCol + '44;\n' +
+'    }\n' +
+'    input[type="radio"]:checked + .switch-card {\n' +
+'      border-color: ' + neonCol + ';\n' +
+'      color: #ffffff;\n' +
+'      background: rgba(20, 30, 50, 0.9);\n' +
+'      box-shadow: 0 0 ' + (30 * glowScale) + 'px ' + neonCol + '88, inset 0 0 15px ' + neonCol + '33;\n' +
+'    }\n' +
+'    .hex-icon {\n' +
+'      width: 28px; height: 28px;\n' +
+'      stroke: currentColor;\n' +
+'      fill: none;\n' +
+'      stroke-width: 2.5;\n' +
+'      transition: transform 0.4s ease;\n' +
+'    }\n' +
+'    input[type="radio"]:checked + .switch-card .hex-icon {\n' +
+'      stroke: ' + neonCol + ';\n' +
+'      fill: ' + neonCol + '33;\n' +
+'      transform: rotate(180deg) scale(1.15);\n' +
+'    }\n' +
+'    .switch-text {\n' +
+'      font-size: 1.25rem;\n' +
+'      font-weight: 700;\n' +
+'      letter-spacing: 0.15em;\n' +
+'      text-transform: uppercase;\n' +
+'    }\n' +
+'    /* Glitch Scanline Line */\n' +
+'    .scanline {\n' +
+'      position: absolute;\n' +
+'      top: 0; left: 0;\n' +
+'      width: 100%; height: 2px;\n' +
+'      background: ' + neonCol + ';\n' +
+'      opacity: 0;\n' +
+'      pointer-events: none;\n' +
+'    }\n' +
+'    .switch-card:hover .scanline {\n' +
+'      opacity: 0.7;\n' +
+'      animation: scanAnim 0.8s linear infinite;\n' +
+'    }\n' +
+'    @keyframes scanAnim {\n' +
+'      0% { top: 0%; }\n' +
+'      100% { top: 100%; }\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <div class="radio-container">\n' +
+'    <label class="radio-btn-group">\n' +
+'      <input type="radio" name="cyber" value="1" checked>\n' +
+'      <div class="switch-card">\n' +
+'        <div class="scanline"></div>\n' +
+'        <svg class="hex-icon" viewBox="0 0 24 24"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7"/></svg>\n' +
+'        <span class="switch-text">NEBULA CHANNEL 01</span>\n' +
+'      </div>\n' +
+'    </label>\n' +
+'    <label class="radio-btn-group">\n' +
+'      <input type="radio" name="cyber" value="2">\n' +
+'      <div class="switch-card">\n' +
+'        <div class="scanline"></div>\n' +
+'        <svg class="hex-icon" viewBox="0 0 24 24"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7"/></svg>\n' +
+'        <span class="switch-text">QUASAR MATRIX 02</span>\n' +
+'      </div>\n' +
+'    </label>\n' +
+'    <label class="radio-btn-group">\n' +
+'      <input type="radio" name="cyber" value="3">\n' +
+'      <div class="switch-card">\n' +
+'        <div class="scanline"></div>\n' +
+'        <svg class="hex-icon" viewBox="0 0 24 24"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7"/></svg>\n' +
+'        <span class="switch-text">PULSAR REACTOR 03</span>\n' +
+'      </div>\n' +
+'    </label>\n' +
+'  </div>\n' +
+'  <script>\n' +
+'    // Cyberpunk Mechanical Audio Feedback\n' +
+'    let audioCtx = null;\n' +
+'    function playClick() {\n' +
+'      try {\n' +
+'        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();\n' +
+'        const osc = audioCtx.createOscillator();\n' +
+'        const gain = audioCtx.createGain();\n' +
+'        osc.type = "sine";\n' +
+'        osc.frequency.setValueAtTime(800, audioCtx.currentTime);\n' +
+'        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);\n' +
+'        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);\n' +
+'        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);\n' +
+'        osc.connect(gain); gain.connect(audioCtx.destination);\n' +
+'        osc.start(); osc.stop(audioCtx.currentTime + 0.08);\n' +
+'      } catch(e) {}\n' +
+'    }\n' +
+'    document.querySelectorAll("input[type=radio]").forEach(r => {\n' +
+'      r.addEventListener("change", playClick);\n' +
+'    });\n' +
+'  <\/script>\n' +
+'</body>\n' +
+'</html>';
   }
 };
-
 // --------------------------------------------------------
 // 10. Ephemeral Flower #2 — Three.js Vertex Shader
 // Author: Paul West / prisoner849 (@prisoner849) (https://codepen.io/editor/prisoner849/pen/019fff34-dce9-769c-98ce-6bd8c954b2e1)

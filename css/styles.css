@@ -161,11 +161,27 @@ body {
 
 /* Header Search */
 .header-search {
-  flex: 1;
-  max-width: 440px;
+  flex: 2;
+  min-width: 280px;
+  max-width: 680px;
   position: relative;
   display: flex;
   align-items: center;
+  transition: all 0.25s ease;
+}
+
+@media (max-width: 1024px) {
+  .header-search {
+    max-width: 520px;
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-search {
+    max-width: 100%;
+    min-width: 160px;
+  }
 }
 
 .search-icon {
@@ -1152,5 +1168,33 @@ body.zen-mode .stage-viewport {
   justify-content: center;
   pointer-events: auto;
 }
+
+/* Copy Toast Feedback */
+.copy-toast {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4), 0 0 15px rgba(16, 185, 129, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.copy-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 
 

@@ -451,15 +451,41 @@ class AppController {
     }
   }
 
+  showCopyToast(message = 'HTML code succesvol gekopieerd naar klembord!') {
+    let toast = document.getElementById('superduper-copy-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'superduper-copy-toast';
+      toast.className = 'copy-toast';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+      <span>${message}</span>
+    `;
+    toast.classList.add('show');
+    clearTimeout(this._toastTimeout);
+    this._toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+
   async copyTextToClipboard(text) {
-    if (navigator.clipboard && window.isSecureContext) {
+    if (!text) return false;
+
+    // 1. Moderne Clipboard API (mits ondersteund en in veilige context)
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
       try {
         await navigator.clipboard.writeText(text);
         return true;
       } catch (err) {
-        console.warn('navigator.clipboard.writeText mislukt, fallback wordt gebruikt:', err);
+        console.warn('navigator.clipboard.writeText geweigerd of mislukt, fallback wordt gestart:', err);
       }
     }
+
+    // 2. Robuuste Fallback via document.execCommand('copy')
     return this.fallbackCopyText(text);
   }
 
@@ -469,7 +495,7 @@ class AppController {
       try {
         textArea = document.createElement('textarea');
         textArea.value = text;
-        textArea.setAttribute('readonly', '');
+        // Zorg dat het element focusbaar en selecteerbaar is zonder de layout te verstoren
         textArea.style.position = 'fixed';
         textArea.style.top = '0';
         textArea.style.left = '0';
@@ -480,19 +506,24 @@ class AppController {
         textArea.style.outline = 'none';
         textArea.style.boxShadow = 'none';
         textArea.style.background = 'transparent';
-        textArea.style.opacity = '0.01';
-        textArea.style.zIndex = '-9999';
+        textArea.style.color = 'transparent';
+        textArea.style.fontSize = '14pt'; // Voorkomt inzoomen op mobiel
+        textArea.setAttribute('aria-hidden', 'true');
+        // Let op: GEEN readonly of disabled zetten (blokkeert selectie op iOS Safari)
+
         document.body.appendChild(textArea);
         textArea.focus({ preventScroll: true });
         textArea.select();
-        textArea.setSelectionRange(0, text.length);
+        textArea.setSelectionRange(0, textArea.value.length);
+
         const success = document.execCommand('copy');
         document.body.removeChild(textArea);
         textArea = null;
+
         if (success) {
           resolve(true);
         } else {
-          reject(new Error('execCommand niet ondersteund'));
+          reject(new Error('execCommand("copy") gaf false terug'));
         }
       } catch (err) {
         if (textArea && textArea.parentNode) {
@@ -582,6 +613,7 @@ class AppController {
         const code = this.currentEffect.getCode(this.currentSettings);
         try {
           await this.copyTextToClipboard(code);
+          this.showCopyToast('HTML code succesvol gekopieerd naar klembord!');
           const originalHTML = this.dom.btnQuickCopy.innerHTML;
           this.dom.btnQuickCopy.innerHTML = `
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -627,6 +659,7 @@ class AppController {
       const code = this.dom.codeContent.textContent;
       try {
         await this.copyTextToClipboard(code);
+        this.showCopyToast('Code gekopieerd naar klembord!');
         this.dom.copyNotice.textContent = '✓ Gekopieerd naar klembord! Plak direct in je eigen bestand.';
         this.dom.copyNotice.classList.add('copied');
         this.dom.btnCopyCode.style.background = '#10b981';
